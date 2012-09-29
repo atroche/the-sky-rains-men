@@ -164,9 +164,10 @@ class Player
     @width = @world.width / 12
     @height = 10
 
+    @sprite = new SpriteImage(@world, "nyancat.png")
+
   render: ->
-    @world.ctx.fillStyle = "blue"
-    @world.ctx.fillRect(@x, @y, @width, @height)
+    @sprite.draw(@x, @y)
 
   update: (delta) ->
     @centreOn (@world.middleOfLane @lane)
@@ -176,3 +177,17 @@ class Player
 
   centreOn: (centreX) ->
     @x = centreX - (@width / 2)
+
+
+class SpriteImage
+  ready: false
+
+  constructor: (@world, url) ->
+    image = new Image
+    image.src = url
+    image.onload = => @ready = true
+    @image = image
+
+  draw: (x, y) ->
+    if @ready
+      @world.ctx.drawImage(@image, x, y)
