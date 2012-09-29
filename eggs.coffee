@@ -84,7 +84,8 @@ class World
 
     @objects = [@player]
 
-  aliveObjects: -> return (object for object in @objects when object.dead isnt true)
+  aliveObjects: ->
+    return (object for object in @objects when object.dead isnt true)
 
   update: (delta) ->
     @timeSinceLastThingFell += delta
@@ -97,7 +98,7 @@ class World
 
   render: ->
     # clear canvas for redrawing!
-    @ctx.clearRect(0, 0, @canvas.width, @canvas.height);
+    @ctx.clearRect(0, 0, @canvas.width, @canvas.height)
 
     @drawLanes()
     @drawScore()
@@ -113,7 +114,7 @@ class World
       laneX += @laneWidth
 
   middleOfLane: (laneNum) =>
-    middleOfLane = @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2
+    return @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2
 
   drawScore: ->
     @ctx.font = "bold 16pt Arial"

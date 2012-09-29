@@ -156,8 +156,7 @@
     };
 
     World.prototype.middleOfLane = function(laneNum) {
-      var middleOfLane;
-      return middleOfLane = this.laneLineWidth / 2 + (laneNum - 1) * this.laneWidth + this.laneWidth / 2;
+      return this.laneLineWidth / 2 + (laneNum - 1) * this.laneWidth + this.laneWidth / 2;
     };
 
     World.prototype.drawScore = function() {
