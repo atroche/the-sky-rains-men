@@ -97,6 +97,22 @@
       this.objects = [this.player];
     }
 
+    World.prototype.aliveObjects = function() {
+      var object;
+      return (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.objects;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          object = _ref[_i];
+          if (object.dead !== true) {
+            _results.push(object);
+          }
+        }
+        return _results;
+      }).call(this);
+    };
+
     World.prototype.update = function(delta) {
       var object, _i, _len, _ref, _results;
       this.timeSinceLastThingFell += delta;
@@ -104,7 +120,7 @@
         this.objects.push(new FallingThing(this));
         this.timeSinceLastThingFell = 0;
       }
-      _ref = this.objects;
+      _ref = this.aliveObjects();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
@@ -117,7 +133,8 @@
       var object, _i, _len, _ref, _results;
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawLanes();
-      _ref = this.objects;
+      this.drawScore();
+      _ref = this.aliveObjects();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
@@ -141,6 +158,11 @@
     World.prototype.middleOfLane = function(laneNum) {
       var middleOfLane;
       return middleOfLane = this.laneLineWidth / 2 + (laneNum - 1) * this.laneWidth + this.laneWidth / 2;
+    };
+
+    World.prototype.drawScore = function() {
+      this.ctx.font = "bold 16pt Arial";
+      return this.ctx.fillText(this.score, this.width + 50, 30);
     };
 
     return World;
@@ -173,7 +195,10 @@
       pastPlayer = this.y > this.world.player.y;
       inSameLaneAsPlayer = this.lane === this.world.player.lane;
       if (pastPlayer) {
-        return this.destroy();
+        this.destroy();
+        if (inSameLaneAsPlayer) {
+          return this.world.score += 1;
+        }
       }
     };
 

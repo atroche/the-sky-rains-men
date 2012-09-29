@@ -78,13 +78,13 @@ class World
     @ctx = @canvas.getContext('2d')
     @ctx.webkitImageSmoothingEnabled = false
 
-
     @score = 0
 
     @player = new Player(this)
 
     @objects = [@player]
 
+  aliveObjects: -> return (object for object in @objects when object.dead isnt true)
 
   update: (delta) ->
     @timeSinceLastThingFell += delta
@@ -93,15 +93,16 @@ class World
       @objects.push (new FallingThing(this))
       @timeSinceLastThingFell = 0
 
-    object.update(delta) for object in @objects
+    object.update(delta) for object in @aliveObjects()
 
   render: ->
     # clear canvas for redrawing!
     @ctx.clearRect(0, 0, @canvas.width, @canvas.height);
 
     @drawLanes()
+    @drawScore()
 
-    object.render() for object in @objects
+    object.render() for object in @aliveObjects()
 
   drawLanes: ->
 
@@ -114,6 +115,9 @@ class World
   middleOfLane: (laneNum) =>
     middleOfLane = @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2
 
+  drawScore: ->
+    @ctx.font = "bold 16pt Arial"
+    @ctx.fillText(@score, @width + 50, 30)
 
 class FallingThing
 
@@ -141,6 +145,9 @@ class FallingThing
 
     if pastPlayer
       @destroy()
+
+      if inSameLaneAsPlayer
+        @world.score += 1
 
   destroy: ->
     @dead = true
