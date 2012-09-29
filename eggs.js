@@ -172,6 +172,8 @@
 
     FallingThing.prototype.y = 10;
 
+    FallingThing.prototype.speed = 0.2;
+
     function FallingThing(world, lane) {
       this.world = world;
       this.lane = lane;
@@ -190,7 +192,7 @@
 
     FallingThing.prototype.update = function(delta) {
       var inSameLaneAsPlayer, pastPlayer;
-      this.y += delta * 0.15;
+      this.y += delta * this.speed;
       pastPlayer = this.y > this.world.player.y && this.y < this.world.player.y + 20;
       inSameLaneAsPlayer = this.lane === this.world.player.lane;
       if (pastPlayer && inSameLaneAsPlayer) {

@@ -123,6 +123,7 @@ class World
 class FallingThing
 
   y: 10
+  speed: 0.2
 
   constructor: (@world, @lane) ->
     @height = 10
@@ -139,7 +140,7 @@ class FallingThing
       @world.ctx.fillRect(@x, @y, @width, @height)
 
   update: (delta) ->
-    @y += delta * 0.15
+    @y += delta * @speed
 
     pastPlayer = @y > @world.player.y and @y < @world.player.y + 20
     inSameLaneAsPlayer = @lane == @world.player.lane
