@@ -141,14 +141,12 @@ class FallingThing
   update: (delta) ->
     @y += delta * 0.15
 
-    pastPlayer = @y > @world.player.y
+    pastPlayer = @y > @world.player.y and @y < @world.player.y + 20
     inSameLaneAsPlayer = @lane == @world.player.lane
 
-    if pastPlayer
+    if pastPlayer and inSameLaneAsPlayer
       @destroy()
-
-      if inSameLaneAsPlayer
-        @world.score += 1
+      @world.score += 1
 
   destroy: ->
     @dead = true
