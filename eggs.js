@@ -172,12 +172,13 @@
 
     FallingThing.prototype.y = 10;
 
-    FallingThing.prototype.speed = 0.2;
+    FallingThing.prototype.speed = 0.4;
 
     function FallingThing(world, lane) {
       this.world = world;
       this.lane = lane;
-      this.height = 10;
+      this.sprite = new SpriteImage(this.world, "fish.png");
+      this.height = this.sprite.image.height - 10;
       this.width = this.world.width / 18;
       this.lane = Math.floor(Math.random() * this.world.numLanes) + 1;
       this.centreOn(this.world.middleOfLane(this.lane));
@@ -185,15 +186,14 @@
 
     FallingThing.prototype.render = function() {
       if (!this.dead) {
-        this.world.ctx.fillStyle = "red";
-        return this.world.ctx.fillRect(this.x, this.y, this.width, this.height);
+        return this.sprite.draw(this.x, this.y);
       }
     };
 
     FallingThing.prototype.update = function(delta) {
       var inSameLaneAsPlayer, pastPlayer;
       this.y += delta * this.speed;
-      pastPlayer = this.y > this.world.player.y && this.y < this.world.player.y + 20;
+      pastPlayer = this.y + this.height > this.world.player.y && this.y < this.world.player.y + 20;
       inSameLaneAsPlayer = this.lane === this.world.player.lane;
       if (pastPlayer && inSameLaneAsPlayer) {
         this.destroy();

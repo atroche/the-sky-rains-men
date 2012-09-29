@@ -123,10 +123,11 @@ class World
 class FallingThing
 
   y: 10
-  speed: 0.2
+  speed: 0.4
 
   constructor: (@world, @lane) ->
-    @height = 10
+    @sprite = new SpriteImage(@world, "fish.png")
+    @height = @sprite.image.height - 10
     @width = @world.width / 18
 
     # a la Python's random.choice
@@ -136,13 +137,12 @@ class FallingThing
 
   render: ->
     unless @dead
-      @world.ctx.fillStyle = "red"
-      @world.ctx.fillRect(@x, @y, @width, @height)
+      @sprite.draw(@x, @y)
 
   update: (delta) ->
     @y += delta * @speed
 
-    pastPlayer = @y > @world.player.y and @y < @world.player.y + 20
+    pastPlayer = @y + @height > @world.player.y and @y < @world.player.y + 20
     inSameLaneAsPlayer = @lane == @world.player.lane
 
     if pastPlayer and inSameLaneAsPlayer
