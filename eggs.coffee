@@ -67,6 +67,8 @@ class World
   numLanes: 3
 
   constructor: ->
+    @elapsedTime = 0
+
     @laneWidth = (@width / @numLanes)
 
     @timeSinceLastThingFell = 2000
@@ -88,6 +90,7 @@ class World
     return (object for object in @objects when object.dead isnt true)
 
   update: (delta) ->
+    @elapsedTime += delta
     @timeSinceLastThingFell += delta
 
     if @timeSinceLastThingFell >= 1000
@@ -123,7 +126,7 @@ class World
 class FallingThing
 
   y: 10
-  speed: 0.4
+  speed: 3
 
   constructor: (@world, @lane) ->
     @sprite = new SpriteImage(@world, "fish.png")
@@ -140,7 +143,7 @@ class FallingThing
       @sprite.draw(@x, @y)
 
   update: (delta) ->
-    @y += delta * @speed
+    @y += delta * @speed * Math.log(@world.elapsedTime) / 50
 
     pastPlayer = @y + @height > @world.player.y and @y < @world.player.y + 20
     inSameLaneAsPlayer = @lane == @world.player.lane

@@ -85,6 +85,7 @@
 
     function World() {
       this.middleOfLane = __bind(this.middleOfLane, this);
+      this.elapsedTime = 0;
       this.laneWidth = this.width / this.numLanes;
       this.timeSinceLastThingFell = 2000;
       this.canvas = document.getElementById('game');
@@ -115,6 +116,7 @@
 
     World.prototype.update = function(delta) {
       var object, _i, _len, _ref, _results;
+      this.elapsedTime += delta;
       this.timeSinceLastThingFell += delta;
       if (this.timeSinceLastThingFell >= 1000) {
         this.objects.push(new FallingThing(this));
@@ -172,7 +174,7 @@
 
     FallingThing.prototype.y = 10;
 
-    FallingThing.prototype.speed = 0.4;
+    FallingThing.prototype.speed = 3;
 
     function FallingThing(world, lane) {
       this.world = world;
@@ -192,7 +194,7 @@
 
     FallingThing.prototype.update = function(delta) {
       var inSameLaneAsPlayer, pastPlayer;
-      this.y += delta * this.speed;
+      this.y += delta * this.speed * Math.log(this.world.elapsedTime) / 50;
       pastPlayer = this.y + this.height > this.world.player.y && this.y < this.world.player.y + 20;
       inSameLaneAsPlayer = this.lane === this.world.player.lane;
       if (pastPlayer && inSameLaneAsPlayer) {
