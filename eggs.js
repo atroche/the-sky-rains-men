@@ -83,6 +83,8 @@
 
     World.prototype.numLanes = 3;
 
+    World.prototype.lives = 3;
+
     function World() {
       this.middleOfLane = __bind(this.middleOfLane, this);
       this.elapsedTime = 0;
@@ -136,6 +138,7 @@
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawLanes();
       this.drawScore();
+      this.drawLives();
       _ref = this.aliveObjects();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -166,6 +169,11 @@
       return this.ctx.fillText(this.score, this.width + 50, 30);
     };
 
+    World.prototype.drawLives = function() {
+      this.ctx.font = "bold 16pt Arial";
+      return this.ctx.fillText(this.lives, this.width + 50, 60);
+    };
+
     return World;
 
   })();
@@ -175,6 +183,8 @@
     FallingThing.prototype.y = 10;
 
     FallingThing.prototype.speed = 3;
+
+    FallingThing.prototype.usedUpALife = false;
 
     function FallingThing(world, lane) {
       this.world = world;
@@ -193,13 +203,17 @@
     };
 
     FallingThing.prototype.update = function(delta) {
-      var inSameLaneAsPlayer, pastPlayer;
+      var atPlayersHeight, inSameLaneAsPlayer;
       this.y += delta * this.speed * Math.log(this.world.elapsedTime) / 50;
-      pastPlayer = this.y + this.height > this.world.player.y && this.y < this.world.player.y + 20;
+      atPlayersHeight = this.y + this.height > this.world.player.y;
       inSameLaneAsPlayer = this.lane === this.world.player.lane;
-      if (pastPlayer && inSameLaneAsPlayer) {
+      if (atPlayersHeight && inSameLaneAsPlayer) {
+        this.world.score += 1;
         this.destroy();
-        return this.world.score += 1;
+      }
+      if (!this.usedUpALife && this.y > this.world.player.y + 30) {
+        this.world.lives -= 1;
+        return this.usedUpALife = true;
       }
     };
 
@@ -231,6 +245,9 @@
     };
 
     Player.prototype.update = function(delta) {
+      if (this.world.lives <= 0) {
+        this.dead = true;
+      }
       return this.centreOn(this.world.middleOfLane(this.lane));
     };
 

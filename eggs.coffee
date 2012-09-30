@@ -65,6 +65,7 @@ class World
   width: 500
   laneLineWidth: 10
   numLanes: 3
+  lives: 3
 
   constructor: ->
     @elapsedTime = 0
@@ -105,6 +106,7 @@ class World
 
     @drawLanes()
     @drawScore()
+    @drawLives()
 
     object.render() for object in @aliveObjects()
 
@@ -123,10 +125,15 @@ class World
     @ctx.font = "bold 16pt Arial"
     @ctx.fillText(@score, @width + 50, 30)
 
+  drawLives: ->
+    @ctx.font = "bold 16pt Arial"
+    @ctx.fillText(@lives, @width + 50, 60)
+
 class FallingThing
 
   y: 10
   speed: 3
+  usedUpALife: false
 
   constructor: (@world, @lane) ->
     @sprite = new SpriteImage(@world, "fish.png")
@@ -145,12 +152,17 @@ class FallingThing
   update: (delta) ->
     @y += delta * @speed * Math.log(@world.elapsedTime) / 50
 
-    pastPlayer = @y + @height > @world.player.y and @y < @world.player.y + 20
+    atPlayersHeight = @y + @height > @world.player.y
     inSameLaneAsPlayer = @lane == @world.player.lane
 
-    if pastPlayer and inSameLaneAsPlayer
-      @destroy()
+    if atPlayersHeight and inSameLaneAsPlayer
       @world.score += 1
+      @destroy()
+
+    if not @usedUpALife and @y > @world.player.y + 30
+      @world.lives -= 1
+      @usedUpALife = true
+
 
   destroy: ->
     @dead = true
@@ -174,6 +186,9 @@ class Player
     @sprite.draw(@x, @y)
 
   update: (delta) ->
+    if @world.lives <= 0
+      @dead = true
+
     @centreOn (@world.middleOfLane @lane)
 
   moveToLane: (lane) ->
