@@ -82,8 +82,6 @@ class World
     @ctx.webkitImageSmoothingEnabled = false
     @ctx.font = "bold 16pt Arial"
 
-    @score = 0
-
     @player = new Player(this)
 
     @objects = [@player]
@@ -109,7 +107,6 @@ class World
     @ctx.clearRect(0, 0, @canvas.width, @canvas.height)
 
     @drawLanes()
-    @drawScore()
     @drawLives()
     @drawTimer()
 
@@ -126,9 +123,6 @@ class World
 
   middleOfLane: (laneNum) =>
     return @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2
-
-  drawScore: ->
-    @ctx.fillText(@score, @width + 50, 30)
 
   drawLives: ->
     @ctx.fillText(@lives, @width + 50, 60)
@@ -165,7 +159,6 @@ class FallingThing
     inSameLaneAsPlayer = @lane == @world.player.lane
 
     if atPlayersHeight and inSameLaneAsPlayer
-      @world.score += 1
       @destroy()
 
     if not @usedUpALife and @y > @world.player.y + 30
