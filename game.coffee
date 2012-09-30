@@ -19,6 +19,11 @@ class Game
       @keysDown[e.keyCode] = true
       if e.keyCode in [37, 39]
         e.preventDefault()
+
+      normalKey = not (e.ctrlKey or e.altKey or e.shiftkey or e.metaKey)
+      if normalKey and @world.gameOver()
+        @world.reset()
+
     $("body").keyup (e)   =>
       delete @keysDown[e.keyCode]
       if e.keyCode in [37, 39]
@@ -89,8 +94,17 @@ class World
   aliveObjects: ->
     return (object for object in @objects when object.dead isnt true)
 
+  reset: ->
+    @elapsedTime = 0
+    @timeSinceLastThingFell = 2000
+
+    @player = new Player(this)
+    @objects = [@player]
+
+    @lives = 3
+
   update: (delta) ->
-    if @lives <= 0
+    if @gameOver()
       return
 
     @elapsedTime += delta
@@ -110,8 +124,16 @@ class World
     @drawLives()
     @drawTimer()
 
-    unless @lives <= 0
+    if @gameOver()
+      @promptReplay()
+    else
       object.render() for object in @aliveObjects()
+
+  gameOver: ->
+    return @lives <= 0
+
+  promptReplay: ->
+    @ctx.fillText("Press any key to play again", @width + 50, 120)
 
   drawLanes: ->
 
@@ -188,7 +210,7 @@ class Player
     @sprite.draw(@x, @y)
 
   update: (delta) ->
-    if @world.lives <= 0
+    if @world.gameOver()
       @dead = true
 
     @centreOn (@world.middleOfLane @lane)
