@@ -80,6 +80,7 @@ class World
 
     @ctx = @canvas.getContext('2d')
     @ctx.webkitImageSmoothingEnabled = false
+    @ctx.font = "bold 16pt Arial"
 
     @score = 0
 
@@ -91,6 +92,9 @@ class World
     return (object for object in @objects when object.dead isnt true)
 
   update: (delta) ->
+    if @lives <= 0
+      return
+
     @elapsedTime += delta
     @timeSinceLastThingFell += delta
 
@@ -107,8 +111,10 @@ class World
     @drawLanes()
     @drawScore()
     @drawLives()
+    @drawTimer()
 
-    object.render() for object in @aliveObjects()
+    unless @lives <= 0
+      object.render() for object in @aliveObjects()
 
   drawLanes: ->
 
@@ -122,12 +128,15 @@ class World
     return @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2
 
   drawScore: ->
-    @ctx.font = "bold 16pt Arial"
     @ctx.fillText(@score, @width + 50, 30)
 
   drawLives: ->
-    @ctx.font = "bold 16pt Arial"
     @ctx.fillText(@lives, @width + 50, 60)
+
+  drawTimer: ->
+    @secondsSinceStart = (@elapsedTime / 1000).toFixed(2)
+
+    @ctx.fillText(@secondsSinceStart, @width + 50, 90)
 
 class FallingThing
 
