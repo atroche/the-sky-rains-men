@@ -19,6 +19,7 @@ class Game
       @keysDown[e.keyCode] = true
       if e.keyCode in [37, 39]
         e.preventDefault()
+        return false
 
       normalKey = not (e.ctrlKey or e.altKey or e.shiftkey or e.metaKey)
       if normalKey and @world.gameOver()
@@ -154,10 +155,25 @@ class World
 
     @ctx.fillText(@secondsSinceStart, @width + 50, 90)
 
-class FallingThing
+
+class Entity
+
+  render: ->
+    unless @dead
+      @sprite.draw(@x, @y)
+
+  destroy: ->
+    @dead = true
+
+  centreOn: (centreX) ->
+    @x = centreX - (@width / 2)
+
+
+
+class FallingThing extends Entity
 
   y: 10
-  speed: 3
+  speed: 5
   usedUpALife: false
 
   constructor: (@world, @lane) ->
@@ -169,10 +185,6 @@ class FallingThing
     @lane = Math.floor(Math.random() * @world.numLanes) + 1
 
     @centreOn (@world.middleOfLane @lane)
-
-  render: ->
-    unless @dead
-      @sprite.draw(@x, @y)
 
   update: (delta) ->
     @y += delta * @speed * Math.log(@world.elapsedTime) / 50
@@ -188,14 +200,9 @@ class FallingThing
       @usedUpALife = true
 
 
-  destroy: ->
-    @dead = true
-
-  centreOn: (centreX) ->
-    @x = centreX - (@width / 2)
 
 
-class Player
+class Player extends Entity
 
   constructor: (@world) ->
     @lane = 2
@@ -206,20 +213,14 @@ class Player
 
     @sprite = new SpriteImage(@world, "nyancat.png")
 
-  render: ->
-    @sprite.draw(@x, @y)
-
   update: (delta) ->
     if @world.gameOver()
-      @dead = true
+      @destroy()
 
     @centreOn (@world.middleOfLane @lane)
 
   moveToLane: (lane) ->
     @lane = lane
-
-  centreOn: (centreX) ->
-    @x = centreX - (@width / 2)
 
 
 class SpriteImage
