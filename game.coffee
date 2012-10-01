@@ -73,7 +73,7 @@ class Game
     setInterval(@main, 1000 / @FPS)
 
   setPlayerSpeed: (speed) =>
-    @world.player.speed = speed
+    @world.playerSpeed = speed
 
   reset: =>
     @world.reset()
@@ -241,11 +241,11 @@ class FallingThing extends Entity
 
 class Player extends Entity
 
-  speed: .7
-
   constructor: (@world) ->
     @lane = 2
     @y = @world.height
+
+    @speed = @world.playerSpeed || .7
 
     @width = @world.width / 12
     @height = 10
