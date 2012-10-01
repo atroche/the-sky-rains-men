@@ -168,6 +168,28 @@ class Entity
   centreOn: (centreX) ->
     @x = centreX - (@width / 2)
 
+  # via https://github.com/mdlawson/rogue/blob/master/src/collision.coffee#L3
+  isCollidingWith: (otherEntity) ->
+    w = (@width + otherEntity.width)/ 2
+    h = (@height + otherEntity.height) / 2
+
+    # x and y distance between entities
+    dx = (@x + @width / 2) - (otherEntity.x + otherEntity.width / 2)
+    dy = (@y + @height / 2) - (otherEntity.y + otherEntity.height / 2)
+
+    if Math.abs(dx) <= w and Math.abs(dy) <= h
+      wy = w * dy
+      hx = h * dx
+
+      if wy > hx
+        if wy > -hx then dir = "top" else dir = "left"
+      else
+        if wy > -hx then dir = "right" else dir ="bottom"
+
+      px = w - (if dx < 0 then -dx else dx)
+      py = h - (if dy < 0 then -dy else dy)
+      return {"dir": dir,"pv": [(if dx < 0 then -px else px),(if dy < 0 then -py else py)]}
+    return false
 
 
 class FallingThing extends Entity
@@ -192,14 +214,12 @@ class FallingThing extends Entity
     atPlayersHeight = @y + @height > @world.player.y
     inSameLaneAsPlayer = @lane == @world.player.lane
 
-    if atPlayersHeight and inSameLaneAsPlayer
+    if @isCollidingWith @world.player
       @destroy()
 
     if not @usedUpALife and @y > @world.player.y + 30
       @world.lives -= 1
       @usedUpALife = true
-
-
 
 
 class Player extends Entity
