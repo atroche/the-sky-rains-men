@@ -1,6 +1,16 @@
 $(->
   game = new Game
   game.run()
+
+  Settings = ->
+    this.playerSpeed = game.world.player.speed
+
+  settings = new Settings
+  gui = new dat.GUI()
+
+  playerSpeed = gui.add(settings, 'playerSpeed', .1, 2)
+  playerSpeed.onChange(game.setPlayerSpeed)
+
 )
 
 
@@ -56,7 +66,8 @@ class Game
   run: ->
     setInterval(@main, 1000 / @FPS)
 
-
+  setPlayerSpeed: (speed) =>
+    @world.player.speed = speed
 
 
 
