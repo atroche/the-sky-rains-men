@@ -17,13 +17,12 @@ class Game
 
     $("body").keydown (e) =>
       @keysDown[e.keyCode] = true
-      if e.keyCode in [37, 39]
-        e.preventDefault()
-        return false
 
       normalKey = not (e.ctrlKey or e.altKey or e.shiftkey or e.metaKey)
-      if normalKey and @world.gameOver()
-        @world.reset()
+      if normalKey
+        e.preventDefault()
+        if @world.gameOver()
+          @world.reset()
 
     $("body").keyup (e)   =>
       delete @keysDown[e.keyCode]
@@ -39,18 +38,14 @@ class Game
 
     @lastUpdate = Date.now()
 
-  reactToInput: ->
+  reactToInput: (delta) ->
     if 37 of @keysDown
-      lane = 1 # left
+      @world.player.moveLeft(delta)
     else if 39 of @keysDown
-      lane = 3 # right
-    else
-      lane = 2 # middle
-
-    @world.player.moveToLane lane
+      @world.player.moveRight(delta)
 
   update: (delta) ->
-    @reactToInput()
+    @reactToInput(delta)
     @world.update(delta)
 
   render: ->
@@ -70,6 +65,8 @@ class World
   height: 500
   width: 500
   laneLineWidth: 10
+  leftBoundary: 0
+  rightBoundary: 500
   numLanes: 3
   lives: 3
 
@@ -81,8 +78,8 @@ class World
     @timeSinceLastThingFell = 2000
 
     @canvas = document.getElementById('game')
-    @canvas.width = @canvas.parentNode.clientWidth
-    @canvas.height = @canvas.parentNode.clientHeight
+    @canvas.width = 1024
+    @canvas.height = 860
 
     @ctx = @canvas.getContext('2d')
     @ctx.webkitImageSmoothingEnabled = false
@@ -224,6 +221,8 @@ class FallingThing extends Entity
 
 class Player extends Entity
 
+  speed: .7
+
   constructor: (@world) ->
     @lane = 2
     @y = @world.height
@@ -233,14 +232,20 @@ class Player extends Entity
 
     @sprite = new SpriteImage(@world, "nyancat.png")
 
+    @centreOn (@world.middleOfLane 2)
+
   update: (delta) ->
     if @world.gameOver()
       @destroy()
 
-    @centreOn (@world.middleOfLane @lane)
+  moveLeft: (delta) ->
+    if @x > @world.leftBoundary
+      @x -= @speed * delta
 
-  moveToLane: (lane) ->
-    @lane = lane
+  moveRight: (delta) ->
+    if @x + @width < @world.rightBoundary
+      @x += @speed * delta
+
 
 
 class SpriteImage
