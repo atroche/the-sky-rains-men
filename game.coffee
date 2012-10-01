@@ -3,6 +3,8 @@ $(->
   game.run()
 
   Settings = ->
+    this.reset = ->
+      game.reset()
     this.playerSpeed = game.world.player.speed
 
   settings = new Settings
@@ -10,6 +12,8 @@ $(->
 
   playerSpeed = gui.add(settings, 'playerSpeed', .1, 2)
   playerSpeed.onChange(game.setPlayerSpeed)
+
+  reset = gui.add(settings, 'reset')
 
 )
 
@@ -69,7 +73,8 @@ class Game
   setPlayerSpeed: (speed) =>
     @world.player.speed = speed
 
-
+  reset: =>
+    @world.reset()
 
 
 
