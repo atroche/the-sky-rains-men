@@ -59,6 +59,8 @@ class Game
       @world.player.moveLeft(delta)
     else if 39 of @keysDown
       @world.player.moveRight(delta)
+    else if 82 of @keysDown # r / R
+      @reset()
 
   update: (delta) ->
     @reactToInput(delta)
