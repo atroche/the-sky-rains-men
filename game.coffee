@@ -19,9 +19,11 @@ class Game
       @keysDown[e.keyCode] = true
 
       normalKey = not (e.ctrlKey or e.altKey or e.shiftkey or e.metaKey)
+      movementKey = e.keyCode in [37, 39]
+
       if normalKey
         e.preventDefault()
-        if @world.gameOver()
+        if not movementKey and @world.gameOver()
           @world.reset()
 
     $("body").keyup (e)   =>
