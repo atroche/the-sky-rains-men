@@ -61,6 +61,8 @@ class Game
       @world.player.moveRight(delta)
     else if 82 of @keysDown # r / R
       @reset()
+    else
+      @world.player.moveToCentre(delta)
 
   update: (delta) ->
     @reactToInput(delta)
@@ -185,6 +187,9 @@ class Entity
   centreOn: (centreX) ->
     @x = centreX - (@width / 2)
 
+  centre: ->
+    return @x + @width / 2
+
   # via https://github.com/mdlawson/rogue/blob/master/src/collision.coffee#L3
   isCollidingWith: (otherEntity) ->
     w = (@width + otherEntity.width)/ 2
@@ -246,6 +251,7 @@ class Player extends Entity
     @y = @world.height
 
     @speed = @world.playerSpeed || .7
+    @returnSpeed = @world.returnSpeed || 1.5
 
     @width = @world.width / 12
     @height = 10
@@ -258,15 +264,43 @@ class Player extends Entity
     if @world.gameOver()
       @destroy()
 
+  leftOfCentre: ->
+    @centre() <= @world.middleOfLane 2
+
+  rightOfCentre: ->
+    @centre() >= @world.middleOfLane 2
+
   moveLeft: (delta) ->
-    if @x > @world.leftBoundary
-      @x -= @speed * delta
+    newPos = @x - @speed * delta
+
+    if newPos > @world.leftBoundary and @leftOfCentre()
+      @x = newPos
+    else if @rightOfCentre()
+      @moveToCentre(delta)
 
   moveRight: (delta) ->
-    if @x + @width < @world.rightBoundary
-      @x += @speed * delta
+    newPos = @x + @speed * delta
 
+    if newPos < @world.rightBoundary and @rightOfCentre()
+      @x = newPos
+    else if @leftOfCentre()
+      @moveToCentre(delta)
 
+  moveToCentre: (delta) ->
+    distanceToMove = @returnSpeed * delta
+
+    if Math.abs(@distanceFromCentre()) <= distanceToMove
+      @centreOn (@world.middleOfLane 2)
+
+    if @distanceFromCentre() > 200
+      console.log "asdf"
+    if @distanceFromCentre() > 0
+      @x -= @returnSpeed * delta
+    if @distanceFromCentre() < 0
+      @x += @returnSpeed * delta
+
+  distanceFromCentre: ->
+    return @centre() - (@world.middleOfLane 2)
 
 class SpriteImage
   ready: false
