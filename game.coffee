@@ -273,7 +273,7 @@ class Player extends Entity
   moveLeft: (delta) ->
     newPos = @x - @speed * delta
 
-    if newPos > @world.leftBoundary and @leftOfCentre()
+    if newPos + (@width / 2) > (@world.middleOfLane 1) and @leftOfCentre()
       @x = newPos
     else if @rightOfCentre()
       @moveToCentre(delta)
@@ -281,7 +281,7 @@ class Player extends Entity
   moveRight: (delta) ->
     newPos = @x + @speed * delta
 
-    if newPos < @world.rightBoundary and @rightOfCentre()
+    if newPos + (@width / 2) < (@world.middleOfLane 3) and @rightOfCentre()
       @x = newPos
     else if @leftOfCentre()
       @moveToCentre(delta)
