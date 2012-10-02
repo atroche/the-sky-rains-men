@@ -222,6 +222,8 @@ class FallingThing extends Entity
 
   constructor: (@world, @lane) ->
     @sprite = new SpriteImage(@world, "orc.png")
+    @lostLifeSound = new Audio("audio/lostLife.wav")
+
     @height = @sprite.image.height - 10
     @width = @world.width / 18
 
@@ -242,6 +244,7 @@ class FallingThing extends Entity
     if not @usedUpALife and @y > @world.player.y + 30
       @world.lives -= 1
       @usedUpALife = true
+      @lostLifeSound.play()
 
 
 class Player extends Entity
