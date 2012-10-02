@@ -221,7 +221,7 @@ class FallingThing extends Entity
   usedUpALife: false
 
   constructor: (@world, @lane) ->
-    @sprite = new SpriteImage(@world, "fish.png")
+    @sprite = new SpriteImage(@world, "orc.png")
     @height = @sprite.image.height - 10
     @width = @world.width / 18
 
