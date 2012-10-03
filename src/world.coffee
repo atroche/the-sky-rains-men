@@ -50,7 +50,7 @@ class World
     @timeSinceLastThingFell += delta
 
     if @timeSinceLastThingFell >= 600
-      @objects.push (new FallingThing(this))
+      @objects.push (new Goblin(this))
       @timeSinceLastThingFell = 0
 
     object.update(delta) for object in @aliveObjects()

@@ -1,11 +1,12 @@
-class FallingThing extends Entity
+class Enemy extends Entity
 
   y: 10
   speed: 3
   usedUpALife: false
 
-  constructor: (@world, @lane) ->
-    @sprite = new SpriteImage(@world, "orc.png")
+  constructor: (@world) ->
+    @sprite = new SpriteImage(@world, @imgFilename)
+
     @lostLifeSound = new Audio("audio/lostLife.wav")
 
     @height = @sprite.image.height
@@ -32,4 +33,4 @@ class FallingThing extends Entity
       @usedUpALife = true
       @lostLifeSound.play()
 
-window.FallingThing = FallingThing
+window.Enemy = Enemy
