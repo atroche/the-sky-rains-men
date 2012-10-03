@@ -159,10 +159,12 @@ class World
 
   drawLanes: ->
 
+    laneHeight = @height - 50
+
     laneX = 0
     while laneX <= @width
       @ctx.fillStyle = "white"
-      @ctx.fillRect(laneX, 10, @laneLineWidth, @height)
+      @ctx.fillRect(laneX, 10, @laneLineWidth, laneHeight)
       laneX += @laneWidth
 
   middleOfLane: (laneNum) =>
