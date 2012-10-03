@@ -111,6 +111,8 @@ class World
 
     @objects = [@player]
 
+    @dyingSound = new Audio("audio/dying.wav")
+
   aliveObjects: ->
     return (object for object in @objects when object.dead isnt true)
 
@@ -243,6 +245,8 @@ class FallingThing extends Entity
 
     if not @usedUpALife and @y > @world.player.y + 30
       @world.lives -= 1
+      if @world.gameOver()
+        @world.dyingSound.play()
       @usedUpALife = true
       @lostLifeSound.play()
 
@@ -265,6 +269,7 @@ class Player extends Entity
 
   update: (delta) ->
     if @world.gameOver()
+      @dyingSound.play()
       @destroy()
 
   leftOfCentre: ->
