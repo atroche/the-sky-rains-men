@@ -5,13 +5,18 @@ $(->
   Settings = ->
     this.reset = ->
       game.reset()
+
     this.playerSpeed = game.world.player.speed
+    this.showHitBoxes = game.world.showHitBoxes
 
   settings = new Settings
   gui = new dat.GUI()
 
   playerSpeed = gui.add(settings, 'playerSpeed', .1, 2)
   playerSpeed.onChange(game.setPlayerSpeed)
+
+  showHitBoxes = gui.add(settings, 'showHitBoxes')
+  showHitBoxes.onChange(game.toggleShowHitBoxes)
 
   reset = gui.add(settings, 'reset')
 
@@ -77,6 +82,9 @@ class Game
   setPlayerSpeed: (speed) =>
     @world.playerSpeed = speed
 
+  toggleShowHitBoxes: (state) =>
+    @world.showHitBoxes = state
+
   reset: =>
     @world.reset()
 
@@ -91,6 +99,7 @@ class World
   rightBoundary: 500
   numLanes: 3
   lives: 3
+  showHitBoxes: false
 
   constructor: ->
     @elapsedTime = 0
@@ -184,6 +193,9 @@ class Entity
   render: ->
     unless @dead
       @sprite.draw(@x, @y)
+      if @world.showHitBoxes
+        @world.ctx.strokeStyle = "white"
+        @world.ctx.strokeRect(@x, @y, @width, @height)
 
   destroy: ->
     @dead = true
@@ -265,7 +277,7 @@ class Player extends Entity
     @width = @world.width / 12
     @height = 10
 
-    @sprite = new SpriteImage(@world, "nyancat.png")
+    @sprite = new SpriteImage(@world, "img/player.png")
 
     @centreOn (@world.middleOfLane 2)
 
