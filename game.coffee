@@ -159,7 +159,7 @@ class World
 
     laneX = 0
     while laneX <= @width
-      @ctx.fillStyle = "black"
+      @ctx.fillStyle = "white"
       @ctx.fillRect(laneX, 10, @laneLineWidth, @height)
       laneX += @laneWidth
 
