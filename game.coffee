@@ -130,7 +130,7 @@ class World
     @elapsedTime += delta
     @timeSinceLastThingFell += delta
 
-    if @timeSinceLastThingFell >= 1000
+    if @timeSinceLastThingFell >= 600
       @objects.push (new FallingThing(this))
       @timeSinceLastThingFell = 0
 
@@ -217,7 +217,7 @@ class Entity
 class FallingThing extends Entity
 
   y: 10
-  speed: 5
+  speed: 3
   usedUpALife: false
 
   constructor: (@world, @lane) ->
