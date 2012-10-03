@@ -12,7 +12,7 @@ class World
   constructor: ->
     @elapsedTime = 0
 
-    @enemyTypes = [Goblin, Skeleton]
+    @fallingTypes = [Goblin, Skeleton, ExtraLife]
 
     @laneWidth = (@width / @numLanes)
 
@@ -51,10 +51,10 @@ class World
     @elapsedTime += delta
     @timeSinceLastThingFell += delta
 
-    nextEnemy = @enemyTypes[Math.floor(Math.random() * @enemyTypes.length)]
+    nextThing = @fallingTypes[Math.floor(Math.random() * @fallingTypes.length)]
 
     if @timeSinceLastThingFell >= 600
-      @objects.push (new nextEnemy(this))
+      @objects.push (new nextThing(this))
       @timeSinceLastThingFell = 0
 
     object.update(delta) for object in @aliveObjects()
