@@ -8,15 +8,18 @@ class World
   numLanes: 3
   lives: 3
   showHitBoxes: false
+  pickupRate: 10
 
   constructor: ->
     @elapsedTime = 0
 
-    @fallingTypes = [Goblin, Skeleton, ExtraLife]
+    @enemyTypes = [Goblin, Skeleton]
+    @pickupTypes = [ExtraLife]
 
     @laneWidth = (@width / @numLanes)
 
     @timeSinceLastThingFell = 2000
+    @thingsSincePickup = 0
 
     @canvas = document.getElementById('game')
     @canvas.width = 1024
@@ -36,6 +39,7 @@ class World
     return (object for object in @objects when object.dead isnt true)
 
   reset: ->
+    @thingsSincePickup = 0
     @elapsedTime = 0
     @timeSinceLastThingFell = 2000
 
@@ -44,17 +48,26 @@ class World
 
     @lives = 3
 
+  sendNewThing: ->
+    choice = (array) -> array[Math.floor(Math.random() * array.length)]
+
+    if @thingsSincePickup >= @pickupRate
+      nextThing = choice(@pickupTypes)
+      @thingsSincePickup = 0
+    else
+      nextThing = choice(@enemyTypes)
+      @thingsSincePickup += 1
+
+    @objects.push (new nextThing(this))
+
   update: (delta) ->
     if @gameOver()
       return
 
     @elapsedTime += delta
     @timeSinceLastThingFell += delta
-
-    nextThing = @fallingTypes[Math.floor(Math.random() * @fallingTypes.length)]
-
     if @timeSinceLastThingFell >= 600
-      @objects.push (new nextThing(this))
+      @sendNewThing()
       @timeSinceLastThingFell = 0
 
     object.update(delta) for object in @aliveObjects()
