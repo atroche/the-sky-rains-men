@@ -240,8 +240,8 @@ class FallingThing extends Entity
     @sprite = new SpriteImage(@world, "orc.png")
     @lostLifeSound = new Audio("audio/lostLife.wav")
 
-    @height = @sprite.image.height - 10
-    @width = @world.width / 18
+    @height = @sprite.image.height
+    @width = @sprite.image.width
 
     # a la Python's random.choice
     @lane = Math.floor(Math.random() * @world.numLanes) + 1
@@ -274,10 +274,10 @@ class Player extends Entity
     @speed = @world.playerSpeed || .7
     @returnSpeed = @world.returnSpeed || 1.5
 
-    @width = @world.width / 12
-    @height = 10
-
     @sprite = new SpriteImage(@world, "img/player.png")
+
+    @height = @sprite.image.height
+    @width = @sprite.image.width
 
     @centreOn (@world.middleOfLane 2)
 
