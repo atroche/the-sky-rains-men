@@ -8,6 +8,7 @@ class Player extends Entity
     @returnSpeed = @world.returnSpeed || 1.5
 
     @sprite = new SpriteImage(@world, "img/player.png")
+    @swordSounds = (new Audio("audio/sword#{num}.wav") for num in [1 .. 4])
 
     @height = @sprite.image.height
     @width = @sprite.image.width
@@ -56,5 +57,9 @@ class Player extends Entity
 
   distanceFromCentre: ->
     return @centre() - (@world.middleOfLane 2)
+
+  makeSwordNoise: ->
+    choice = (array) -> array[Math.floor(Math.random() * array.length)]
+    choice(@swordSounds).play()
 
 window.Player = Player

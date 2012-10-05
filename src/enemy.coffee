@@ -16,4 +16,8 @@ class Enemy extends FallingThing
 
     super(delta)
 
+  onTouchingPlayer: ->
+    @world.player.makeSwordNoise()
+    super()
+
 window.Enemy = Enemy
