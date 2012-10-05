@@ -22,8 +22,8 @@ class World
     @thingsSincePickup = 0
 
     @canvas = document.getElementById('game')
-    @canvas.width = 1024
-    @canvas.height = 768
+    @canvas.width = 800
+    @canvas.height = 600
 
     @ctx = @canvas.getContext('2d')
     @ctx.webkitImageSmoothingEnabled = false
