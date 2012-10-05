@@ -1,0 +1,1213 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"pick",
+				"pickupRate"
+			],
+			[
+				"right",
+				"rightOfCentre"
+			],
+			[
+				"left",
+				"leftOfCentre"
+			],
+			[
+				"move",
+				"moveToCentre"
+			],
+			[
+				"dist",
+				"distanceFromCentre"
+			],
+			[
+				"mi",
+				"middleOfLane"
+			],
+			[
+				"sha_",
+				"sha_of_new_dump"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "class World\n\n  height: 500\n  width: 500\n  laneLineWidth: 10\n  leftBoundary: 0\n  rightBoundary: 500\n  numLanes: 3\n  lives: 3\n  showHitBoxes: false\n  pickupRate: 10\n\n  constructor: ->\n    @elapsedTime = 0\n\n    @enemyTypes = [Goblin, Skeleton]\n    @pickupTypes = [ExtraLife]\n\n    @laneWidth = (@width / @numLanes)\n\n    @timeSinceLastThingFell = 2000\n    @thingsSincePickup = 0\n\n    @canvas = document.getElementById('game')\n    @canvas.width = 1024\n    @canvas.height = 768\n\n    @ctx = @canvas.getContext('2d')\n    @ctx.webkitImageSmoothingEnabled = false\n    @ctx.font = \"bold 16pt Arial\"\n\n    @player = new Player(this)\n\n    @objects = [@player]\n\n    @dyingSound = new Audio(\"audio/dying.wav\")\n\n  aliveObjects: ->\n    return (object for object in @objects when object.dead isnt true)\n\n  reset: ->\n    @thingsSincePickup = 0\n    @elapsedTime = 0\n    @timeSinceLastThingFell = 2000\n\n    @player = new Player(this)\n    @objects = [@player]\n\n    @lives = 3\n\n  sendNewThing: ->\n    choice = (array) -> array[Math.floor(Math.random() * array.length)]\n\n    if @thingsSincePickup >= @pickupRate\n      nextThing = choice(@pickupTypes)\n      @thingsSincePickup = 0\n    else\n      nextThing = choice(@enemyTypes)\n      @thingsSincePickup += 1\n\n    @objects.push (new nextThing(this))\n\n  update: (delta) ->\n    if @gameOver()\n      return\n\n    @elapsedTime += delta\n    @timeSinceLastThingFell += delta\n    if @timeSinceLastThingFell >= 600\n      @sendNewThing()\n      @timeSinceLastThingFell = 0\n\n    object.update(delta) for object in @aliveObjects()\n\n  render: ->\n    # clear canvas for redrawing!\n    @ctx.clearRect(0, 0, @canvas.width, @canvas.height)\n\n    @drawLanes()\n    @drawLives()\n    @drawTimer()\n\n    if @gameOver()\n      @promptReplay()\n    else\n      object.render() for object in @aliveObjects()\n\n  gameOver: ->\n    return @lives <= 0\n\n  promptReplay: ->\n    @ctx.fillText(\"Press any key to play again\", @width + 50, 120)\n\n  drawBackground: ->\n    @ctx.\n\n  drawLanes: ->\n    laneHeight = @height - 50\n\n    laneX = 0\n    while laneX <= @width\n      @ctx.fillStyle = \"white\"\n      @ctx.fillRect(laneX, 10, @laneLineWidth, laneHeight)\n      laneX += @laneWidth\n\n  middleOfLane: (laneNum) =>\n    return @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2\n\n  drawLives: ->\n    @ctx.fillText(@lives, @width + 50, 60)\n\n  drawTimer: ->\n    @secondsSinceStart = (@elapsedTime / 1000).toFixed(2)\n\n    @ctx.fillText(@secondsSinceStart, @width + 50, 90)\n\nwindow.World = World",
+			"file": "world.coffee",
+			"file_size": 2448,
+			"file_write_time": 1349396344000000,
+			"settings":
+			{
+				"buffer_size": 2479,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "extra_life.coffee",
+			"settings":
+			{
+				"buffer_size": 172,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pickup.coffee",
+			"settings":
+			{
+				"buffer_size": 57,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "falling_thing.coffee",
+			"settings":
+			{
+				"buffer_size": 603,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "enemy.coffee",
+			"settings":
+			{
+				"buffer_size": 407,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 12 files for \"touchedPlayer\" (case sensitive)\n\n/Users/atroche/dev/game/src/falling_thing.coffee:\n   17      @y += delta * @speed * Math.log(@world.elapsedTime) / 50\n   18  \n   19:     if not touchedPlayer and @isCollidingWith(@world.player)\n   20        @onTouchingPlayer()\n   21  \n   22    onTouchingPlayer: ->\n   23      @destroy()\n   24:     @touchedPlayer = true\n   25  \n   26  \n\n2 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 414,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "game.coffee",
+			"settings":
+			{
+				"buffer_size": 1232,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "skeleton.coffee",
+			"settings":
+			{
+				"buffer_size": 103,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/atroche/dev/game/game.html",
+			"settings":
+			{
+				"buffer_size": 1282,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sprite_image.coffee",
+			"settings":
+			{
+				"buffer_size": 270,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 291.0,
+		"selected_items":
+		[
+			[
+				"tidy",
+				"Tidy HTML"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 516.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/atroche/dev/game/compiled/sprite_image.js",
+		"/Users/atroche/dev/game/src/goblin.coffee",
+		"/Users/atroche/dev/game/src/sprite_image.coffee",
+		"/Users/atroche/dev/game/src/entity.coffee",
+		"/Users/atroche/dev/game/compiled/all.js",
+		"/Users/atroche/dev/game/src/main.coffee",
+		"/Users/atroche/dev/game/game.html",
+		"/Users/atroche/dev/game/src/player.coffee",
+		"/Users/atroche/dev/game/src/falling_thing.coffee",
+		"/Users/atroche/dev/game/game.coffee",
+		"/Users/atroche/dev/game/compiled/world.js",
+		"/Users/atroche/dev/game/world.coffee",
+		"/Users/atroche/dev/game/player.js",
+		"/Users/atroche/dev/game/main.coffee",
+		"/Users/atroche/dev/game/animation2.html",
+		"/Users/atroche/dev/game/eggs.js",
+		"/Users/atroche/bws/app/helpers/application_helper.rb",
+		"/Users/atroche/bws/lib/tasks/manual_db_restore_instructions.txt",
+		"/Users/atroche/bws/app/controllers/planner_controller.rb",
+		"/Users/atroche/bws/app/views/main/index.html.erb",
+		"/Users/atroche/bws/app/views/layouts/main.html.erb",
+		"/Users/atroche/bws/app/views/layouts/metrics.html.erb",
+		"/Users/atroche/bws/app/views/layouts/planner.html.erb",
+		"/Users/atroche/bws/app/views/layouts/hr.html.erb",
+		"/Users/atroche/bws/app/views/layouts/admin.html.erb",
+		"/Users/atroche/bws/app/views/layouts/application.html.erb",
+		"/Users/atroche/bws/app/assets/stylesheets/bws.css",
+		"/Users/atroche/bws/app/views/metrics/rough_cut_plan.html.erb",
+		"/Users/atroche/bws/app/views/layouts/printer.html.erb",
+		"/Users/atroche/bws/app/views/admin/index.html.erb",
+		"/Users/atroche/bws/app/controllers/admin_controller.rb",
+		"/Users/atroche/bws/lib/tasks/dev.rake",
+		"/Users/atroche/bws/app/controllers/main_controller.rb",
+		"/Users/atroche/bws/app/views/shared/_sign_in.html.erb",
+		"/Users/atroche/bws/app/views/main/sign_in.html.erb",
+		"/Users/atroche/bws/app/models/order_book_metric.rb",
+		"/Users/atroche/bws/lib/tasks/mysql.rake",
+		"/Users/atroche/bws/app/models/order.rb",
+		"/Users/atroche/bws/db/schema.rb",
+		"/Users/atroche/bws/features/edit_task.feature",
+		"/Users/atroche/bws/app/assets/bootstrap/css/bootstrap.css",
+		"/Users/atroche/bws/app/views/shared/_letter_head.html.erb",
+		"/Users/atroche/bws/app/assets/stylesheets/application.css",
+		"/Users/atroche/bws/Gemfile",
+		"/Users/atroche/bws/app/assets/stylesheets/print.css",
+		"/Users/atroche/bws/app/assets/stylesheets/bootstrap_and_overrides.css.less",
+		"/Users/atroche/bws/spec/integration/saved_expectations/test_user/planner/view_leather_purchasing_tasks_to_progress.html",
+		"/Users/atroche/bws/app/models/system_alert.rb",
+		"/Users/atroche/bws/README.md",
+		"/Users/atroche/bws/app/models/emailer.rb",
+		"/Users/atroche/bws/app/models/system_task.rb",
+		"/Users/atroche/bws/app/controllers/metrics_controller.rb",
+		"/Users/atroche/bws/app/views/metrics/mtd_orders.html.erb",
+		"/Users/atroche/bws/app/models/buffer_status_metric.rb",
+		"/Users/atroche/bws/app/models/task.rb",
+		"/Users/atroche/bws/app/models/task_note.rb",
+		"/Users/atroche/bws/spec/factories/factories.rb",
+		"/Users/atroche/bws/features/step_definitions/job_steps.rb",
+		"/Users/atroche/bws/features/step_definitions/task_steps.rb",
+		"/Users/atroche/bws/app/views/planner/edit_task.html.erb",
+		"/Users/atroche/bws/app/views/shared/_tasks_table.html.erb",
+		"/Users/atroche/bws/config/database.psql.yml",
+		"/Users/atroche/bws/config/database.yml",
+		"/Users/atroche/bws/config.ru",
+		"/Users/atroche/bws/app/views/planner/new_task_note.html.erb",
+		"/Users/atroche/bws/app/models/user.rb",
+		"/Users/atroche/bws/app/controllers/application_controller.rb",
+		"/Users/atroche/bws/app/views/planner/view_job.html.erb",
+		"/Users/atroche/bws/spec/support/db_configuration.rb",
+		"/Users/atroche/bws/features/step_definitions/auth_steps.rb",
+		"/Users/atroche/bws/features/support/env.rb",
+		"/Users/atroche/bws/features/support/use_headless.rb",
+		"/Users/atroche/bws/features/visit_homepage.feature",
+		"/Users/atroche/bws/app/models/job.rb",
+		"/Users/atroche/bws/config/environments/production.rb",
+		"/Users/atroche/bws/lib/tasks/archive.rake",
+		"/Users/atroche/bws/db/mysql2psql.yml",
+		"/Users/atroche/bws/lib/tasks/mysql -u root bws_development < dropbox:2012-07-30",
+		"/Users/atroche/bws/config/cucumber.yml",
+		"/Users/atroche/bws/features/step_definitions/page_steps.rb",
+		"/Users/atroche/bws/spec/mailers/syncdb_mailer_spec.rb",
+		"/Users/atroche/bws/features/step_definitions/url_steps.rb",
+		"/Users/atroche/bws/lib/tasks/13th July, 1:2",
+		"/Users/atroche/bws/jenkins.sh",
+		"/Users/atroche/bws/sync_heroku_db.sh",
+		"/Users/atroche/bws/app/views/syncdb_mailer/uploaded_to_heroku.html.erb",
+		"/Users/atroche/bws/app/views/syncdb_mailer/uploaded_to_heroku.txt.erb",
+		"/Users/atroche/bws/app/mailers/syncdb_mailer.rb",
+		"/Users/atroche/bws/restore-psql-from-mysql.sh",
+		"/Users/atroche/bws/dropbox/dumps_uploaded_to_heroku.txt",
+		"/Users/atroche/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/atroche/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/atroche/bws/config/environments/development.rb",
+		"/Users/atroche/bws/runtests.sh",
+		"/Users/atroche/bws/spec/models/order_spec.rb",
+		"/Users/atroche/bws/script/rails",
+		"/Users/atroche/bws/script/console",
+		"/Users/atroche/bws/script/performance/benchmarker",
+		"/Users/atroche/bws/config/application.rb",
+		"/Users/atroche/bws/vendor/plugins/.gitkeep",
+		"/Users/atroche/bws/app/views/shared/_actions_table.html.erb",
+		"/Users/atroche/bws/app/views/admin/view_all_users.html.erb",
+		"/Users/atroche/bws/app/views/hr/view_all_closed_days.html.erb",
+		"/Users/atroche/bws/app/views/hr/view_all_employees.html.erb",
+		"/Users/atroche/bws/app/views/hr/view_employee.html.erb",
+		"/Users/atroche/bws/app/views/planner/view_job_with_gantt.html.erb",
+		"/Users/atroche/bws/app/views/shared/_carriage_items_table.html.erb",
+		"/Users/atroche/bws/app/views/shared/_detailed_tasks_table.html.erb",
+		"/Users/atroche/bws/app/views/shared/_footer.html.erb",
+		"/Users/atroche/bws/spec/integration/scatter_spec.rb",
+		"/Users/atroche/bws/spec/support/saved_expectations.rb",
+		"/Users/atroche/bws/Gemfile.lock",
+		"/Users/atroche/bws/app/assets/javascripts/jsgantt.js",
+		"/Users/atroche/bws/app/assets/javascripts/application.js",
+		"/Users/atroche/bws/config/environments/test.rb",
+		"/Users/atroche/bws/config/routes.rb",
+		"/Users/atroche/bws/public/javascripts/application.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"*.coffee",
+			"",
+			"*.rb",
+			"*.erb",
+			"",
+			"*.rb",
+			"*.erb",
+			"*.js",
+			"*.rb",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"Image",
+			"enemyTypes",
+			"touchedPlayer",
+			"enemyTypes",
+			"Pickup",
+			"Enemy",
+			"enemies",
+			"choice",
+			"Goblin",
+			"FallingThing",
+			"world",
+			".draw",
+			"SpriteImage",
+			"FallingThing",
+			"playerSpeed",
+			"enemySpeed",
+			"construc",
+			"@lane",
+			"height =",
+			"height",
+			"render",
+			"player",
+			"error500",
+			"Collidin",
+			"drawLane",
+			"Player",
+			"dying",
+			"gameOver",
+			"lives ",
+			"lives <",
+			"promptRepl",
+			"gameOver",
+			"world.game",
+			"gameOver",
+			"drawLan",
+			"fillRect",
+			"centre() >",
+			"centre() <",
+			"37",
+			"keysD",
+			"keysDown",
+			"reactToInput",
+			"moveRight",
+			"centre",
+			"moveToCentre",
+			"moveRight",
+			"@world.widt",
+			"setPlayerSpeed",
+			"setPlay",
+			"speed",
+			"class Game",
+			"reaact",
+			"isCollidingWith",
+			"@speed",
+			"keysDown",
+			"isCollidingWith",
+			"r2.",
+			"r1.",
+			"moveTo",
+			"gameOver",
+			"reset",
+			"@world.lives <= 0",
+			"@lives <= 0",
+			"reactTo",
+			"Score",
+			"score",
+			"@score",
+			"@elapsedTime",
+			"elapsedTime",
+			"height",
+			"scale",
+			"draw",
+			"scale",
+			"* ",
+			"drawLa",
+			"laneLineWidth",
+			"pastPlayer",
+			"laneWidth",
+			"10",
+			"left",
+			"Player",
+			"height",
+			"300",
+			"fillRect",
+			"FallingThing",
+			"update:",
+			"reactTo",
+			"@ctx",
+			"now",
+			";",
+			"frame",
+			"time",
+			"scale",
+			"signed_in_as_username",
+			"class=\"OK\"",
+			"class=\"Ok\"",
+			".OK",
+			"printer",
+			"dow-",
+			" Page",
+			"<br />",
+			"Planner Page",
+			"wismo",
+			"layout",
+			"order_date",
+			"dow-",
+			"dow",
+			"sort",
+			"order_date",
+			":size",
+			"company-name",
+			"<html>",
+			"dynCalendar",
+			"snap_shot!",
+			"snapshot",
+			"opening_order_book",
+			"OrderBookMetric",
+			"metrics",
+			"metric",
+			"@ob",
+			"order_book_by_manager",
+			"def self.order_book_by_manager",
+			"def order_book_by_manager",
+			"@ob",
+			"CSV::",
+			"body",
+			"dow-",
+			"dow"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"fallingTypes",
+			"otherEntity.",
+			"@",
+			"@world.gameOver()",
+			"@gameOver()",
+			"laneLineWidth",
+			"@world.ctx",
+			"",
+			"bws-latest.psql.dump",
+			" return unless system(\"$1\")",
+			"return unless system(\"$1\")",
+			":data => {confirm: \"$1\"}"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 9,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "world.coffee",
+					"settings":
+					{
+						"buffer_size": 2479,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								570,
+								570
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "extra_life.coffee",
+					"settings":
+					{
+						"buffer_size": 172,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								48,
+								48
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "pickup.coffee",
+					"settings":
+					{
+						"buffer_size": 57,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								33,
+								33
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "falling_thing.coffee",
+					"settings":
+					{
+						"buffer_size": 603,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								540,
+								540
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "enemy.coffee",
+					"settings":
+					{
+						"buffer_size": 407,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								407,
+								407
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"settings":
+					{
+						"buffer_size": 414,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										201,
+										214
+									],
+									[
+										356,
+										369
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								206,
+								206
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "game.coffee",
+					"settings":
+					{
+						"buffer_size": 1232,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1221,
+								1222
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 245.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "skeleton.coffee",
+					"settings":
+					{
+						"buffer_size": 103,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								103,
+								103
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/Users/atroche/dev/game/game.html",
+					"settings":
+					{
+						"buffer_size": 1282,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1105,
+								1105
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "sprite_image.coffee",
+					"settings":
+					{
+						"buffer_size": 270,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"sprite_im",
+				"src/sprite_image.coffee"
+			],
+			[
+				"sp",
+				"compiled/sprite_image.js"
+			],
+			[
+				"entity",
+				"src/entity.coffee"
+			],
+			[
+				"game.html",
+				"game.html"
+			],
+			[
+				"all.js",
+				"compiled/all.js"
+			],
+			[
+				"ent",
+				"src/entity.coffee"
+			],
+			[
+				"world.cf",
+				"src/world.coffee"
+			],
+			[
+				"world",
+				"compiled/world.js"
+			],
+			[
+				"main",
+				"main.coffee"
+			],
+			[
+				"game.c",
+				"game.coffee"
+			],
+			[
+				"game.coff",
+				"game.coffee"
+			],
+			[
+				"eggs.js",
+				"eggs.js"
+			],
+			[
+				"instrucio",
+				"lib/tasks/manual_db_restore_instructions.txt"
+			],
+			[
+				"rough",
+				"app/views/metrics/rough_cut_plan.html.erb"
+			],
+			[
+				"adminind",
+				"app/views/admin/index.html.erb"
+			],
+			[
+				"admin_c",
+				"app/controllers/admin_controller.rb"
+			],
+			[
+				"admin",
+				"app/controllers/admin_controller.rb"
+			],
+			[
+				"main_con",
+				"app/controllers/main_controller.rb"
+			],
+			[
+				"sign",
+				"app/views/shared/_sign_in.html.erb"
+			],
+			[
+				"sign_in",
+				"app/views/main/sign_in.html.erb"
+			],
+			[
+				"planner_con",
+				"app/controllers/planner_controller.rb"
+			],
+			[
+				"schema",
+				"db/schema.rb"
+			],
+			[
+				"instruc",
+				"lib/tasks/manual_db_restore_instructions.txt"
+			],
+			[
+				"mysql.rake",
+				"lib/tasks/mysql.rake"
+			],
+			[
+				"order_book",
+				"app/models/order_book_metric.rb"
+			],
+			[
+				"order.rb",
+				"app/models/order.rb"
+			],
+			[
+				"gemfile",
+				"Gemfile"
+			],
+			[
+				"fea",
+				"features/edit_task.feature"
+			],
+			[
+				"print_leather",
+				"spec/integration/saved_expectations/test_user/planner/view_leather_purchasing_tasks_to_progress.html"
+			],
+			[
+				"bootstrap.css",
+				"app/assets/bootstrap/css/bootstrap.css"
+			],
+			[
+				"application.css",
+				"app/assets/stylesheets/application.css"
+			],
+			[
+				".css",
+				"app/assets/stylesheets/bws.css"
+			],
+			[
+				"order_bok",
+				"app/models/order_book_metric.rb"
+			],
+			[
+				"mtd_o",
+				"app/views/metrics/mtd_orders.html.erb"
+			],
+			[
+				"mtd_orders",
+				"app/views/metrics/mtd_orders.html.erb"
+			],
+			[
+				"mysql",
+				"lib/tasks/mysql.rake"
+			],
+			[
+				"readme",
+				"README.md"
+			],
+			[
+				"emailer",
+				"app/models/emailer.rb"
+			],
+			[
+				"system_task",
+				"app/models/system_task.rb"
+			],
+			[
+				"instr",
+				"lib/tasks/manual_db_restore_instructions.txt"
+			],
+			[
+				"manual",
+				"lib/tasks/manual_db_restore_instructions.txt"
+			],
+			[
+				"gemfil",
+				"Gemfile"
+			],
+			[
+				"config.ru",
+				"config.ru"
+			],
+			[
+				"gemfie",
+				"Gemfile"
+			],
+			[
+				"database",
+				"config/database.yml"
+			],
+			[
+				"tasks_table",
+				"app/views/shared/_tasks_table.html.erb"
+			],
+			[
+				"user.rb",
+				"app/models/user.rb"
+			],
+			[
+				"task_teps",
+				"features/step_definitions/task_steps.rb"
+			],
+			[
+				"view_job",
+				"app/views/planner/view_job.html.erb"
+			],
+			[
+				"task",
+				"app/models/task_note.rb"
+			],
+			[
+				"task.rb",
+				"app/models/task.rb"
+			],
+			[
+				"steps.rb",
+				"features/step_definitions/job_steps.rb"
+			],
+			[
+				"factories",
+				"spec/factories/factories.rb"
+			],
+			[
+				"edit_",
+				"features/edit_task.feature"
+			],
+			[
+				"edit_task",
+				"app/views/planner/edit_task.html.erb"
+			],
+			[
+				"factorie",
+				"spec/factories/factories.rb"
+			],
+			[
+				"factor",
+				"spec/factories/factories.rb"
+			],
+			[
+				"steps",
+				"features/step_definitions/auth_steps.rb"
+			],
+			[
+				"feature",
+				"features/edit_task.feature"
+			],
+			[
+				"env.",
+				"features/support/env.rb"
+			],
+			[
+				"job.rb",
+				"app/models/job.rb"
+			],
+			[
+				"fac",
+				"spec/factories/factories.rb"
+			],
+			[
+				"instru",
+				"lib/tasks/manual_db_restore_instructions.txt"
+			],
+			[
+				"applicationhelp",
+				"app/helpers/application_helper.rb"
+			],
+			[
+				"mysql.rae",
+				"lib/tasks/mysql.rake"
+			],
+			[
+				"archive.",
+				"lib/tasks/archive.rake"
+			],
+			[
+				"dataas",
+				"config/database.yml"
+			],
+			[
+				"mysql2",
+				"db/mysql2psql.yml"
+			],
+			[
+				"mysrake",
+				"lib/tasks/mysql.rake"
+			],
+			[
+				"data",
+				"config/database.yml"
+			],
+			[
+				"page_",
+				"features/step_definitions/page_steps.rb"
+			],
+			[
+				"sync_",
+				"spec/mailers/syncdb_mailer_spec.rb"
+			],
+			[
+				"features",
+				"features/visit_homepage.feature"
+			],
+			[
+				"cucumber.yml",
+				"config/cucumber.yml"
+			],
+			[
+				"schem",
+				"db/schema.rb"
+			],
+			[
+				"jen",
+				"jenkins.sh"
+			],
+			[
+				"jenkin",
+				"jenkins.sh"
+			],
+			[
+				"datab",
+				"config/database.yml"
+			],
+			[
+				".sh",
+				"sync_heroku_db.sh"
+			],
+			[
+				"rake",
+				"lib/tasks/mysql.rake"
+			],
+			[
+				"syncdb",
+				"app/mailers/syncdb_mailer.rb"
+			],
+			[
+				"mailer",
+				"app/models/emailer.rb"
+			],
+			[
+				"mysql.r",
+				"lib/tasks/mysql.rake"
+			],
+			[
+				"dump",
+				"dropbox/dumps_uploaded_to_heroku.txt"
+			],
+			[
+				"archive",
+				"lib/tasks/archive.rake"
+			],
+			[
+				"runtest",
+				"runtests.sh"
+			],
+			[
+				"developm",
+				"config/environments/development.rb"
+			],
+			[
+				"prod",
+				"config/environments/production.rb"
+			],
+			[
+				"applicati",
+				"config/application.rb"
+			],
+			[
+				"gemfile.lock",
+				"Gemfile.lock"
+			],
+			[
+				"application.rb",
+				"config/application.rb"
+			],
+			[
+				"development.rb",
+				"config/environments/development.rb"
+			],
+			[
+				"test.rb",
+				"config/environments/test.rb"
+			],
+			[
+				"dat",
+				"config/database.yml"
+			],
+			[
+				"bws.css",
+				"app/assets/stylesheets/bws.css"
+			],
+			[
+				"jsgan",
+				"app/assets/javascripts/jsgantt.js"
+			],
+			[
+				"dataa",
+				"config/database.yml"
+			],
+			[
+				"main.er",
+				"app/views/layouts/main.html.erb"
+			],
+			[
+				"application.js",
+				"app/assets/javascripts/application.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 231.0,
+	"status_bar_visible": true
+}

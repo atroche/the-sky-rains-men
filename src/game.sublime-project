@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/atroche/dev/game",
+      "file_exclude_patterns": ["*.js", "*.psd"]
+		}
+	]
+}
