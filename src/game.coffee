@@ -28,6 +28,11 @@ class Game
 
     @world = new World
 
+    bg_music = new Audio("audio/bg_music.mp3")
+    bg_music.loop = true
+    bg_music.addEventListener 'canplaythrough', ->
+      bg_music.play()
+
   main: =>
     delta = Date.now() - @lastUpdate
 
