@@ -23,7 +23,7 @@ class World
 
     @canvas = document.getElementById('game')
     @canvas.width = 1024
-    @canvas.height = 860
+    @canvas.height = 768
 
     @ctx = @canvas.getContext('2d')
     @ctx.webkitImageSmoothingEnabled = false
