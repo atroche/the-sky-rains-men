@@ -13,6 +13,9 @@ class Game
       normalKey = not (e.ctrlKey or e.altKey or e.shiftkey or e.metaKey)
       movementKey = e.keyCode in [37, 39]
 
+      if e.keyCode == 80 # p / P
+        @togglePaused()
+
       if normalKey
         e.preventDefault()
         if not movementKey and @world.gameOver()
@@ -27,8 +30,10 @@ class Game
 
   main: =>
     delta = Date.now() - @lastUpdate
-    @update(delta)
-    @render()
+
+    unless @paused
+      @update(delta)
+      @render()
 
     @lastUpdate = Date.now()
 
@@ -60,5 +65,8 @@ class Game
 
   reset: =>
     @world.reset()
+
+  togglePaused: ->
+    @paused = not @paused
 
 window.Game = Game
