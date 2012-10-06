@@ -2,7 +2,7 @@ class Enemy extends FallingThing
 
   usedUpALife: false
 
-  constructor: (@world) ->
+  constructor: (@world, @lane) ->
     @lostLifeSound = new Audio("audio/lostLife.wav")
     super(@world)
 

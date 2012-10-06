@@ -1,15 +1,13 @@
 class FallingThing extends Entity
 
-  y: 10
+  @y: 10
 
   constructor: (@world) ->
+    @y = 10
     @sprite = new SpriteImage(@world, @imgFilename)
 
     @height = @sprite.image.height
     @width = @sprite.image.width
-
-    # a la Python's random.choice
-    @lane = Math.floor(Math.random() * @world.numLanes) + 1
 
     @centreOn (@world.middleOfLane @lane)
 
@@ -23,5 +21,9 @@ class FallingThing extends Entity
     @destroy()
     @touchedPlayer = true
 
+
+  @timeToHit: ->
+    distanceToPlayer = World.height - @y
+    return distanceToPlayer / @speed
 
 window.FallingThing = FallingThing

@@ -1,5 +1,6 @@
 class Goblin extends Enemy
 
+  @speed: 3
   speed: 3
   imgFilename: "img/goblin.png"
 

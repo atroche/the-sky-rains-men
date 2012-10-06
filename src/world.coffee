@@ -1,5 +1,6 @@
 class World
 
+  @height: 500
   height: 500
   width: 500
   laneLineWidth: 10
@@ -35,40 +36,79 @@ class World
 
     @dyingSound = new Audio("audio/dying.wav")
 
+    @enemyQueue = @queueMonsters()
+
+  queueMonsters: ->
+    queue = []
+    choice = (array) -> array[Math.floor(Math.random() * array.length)]
+    hitTime = 0
+    oldLane = 2
+    while hitTime < 1000 * 60 * 3
+      feasibleEnemies = (enemyType for enemyType in @enemyTypes when hitTime > enemyType.timeToHit())
+      if feasibleEnemies.length == 0
+        hitTime += 1
+        continue
+      newEnemy = choice(feasibleEnemies)
+      newLane = Math.floor(Math.random() * @numLanes) + 1
+
+      if queue.length == 0
+        reactionTime = 0
+      else
+        reactionTime = 250
+
+      newHitTime = hitTime + @timeBetweenLanes(oldLane, newLane) + reactionTime
+      queue.push([newEnemy, newHitTime, newLane])
+
+      hitTime = newHitTime
+      oldLane = newLane
+
+    hitInfoToDropInfo = (hitInfo) ->
+      enemyType = hitInfo[0]
+      hitAt = hitInfo[1]
+      lane = hitInfo[2]
+
+      return [enemyType, hitAt - enemyType.timeToHit(), lane]
+
+    dropQueue = (hitInfoToDropInfo(hitInfo) for hitInfo in queue)
+    return dropQueue
+
+
+  timeBetweenLanes: (prevLane, newLane) ->
+    timeToSideLane = @laneWidth / @player.speed
+    timeToMiddleLane = @laneWidth / @player.returnSpeed
+
+    if prevLane == 2
+      return timeToSideLane
+    else if newLane == 2
+      return timeToMiddleLane
+    else
+      return timeToMiddleLane + timeToSideLane
+
   aliveObjects: ->
     return (object for object in @objects when object.dead isnt true)
 
   reset: ->
-    @thingsSincePickup = 0
+    @enemyQueue = @queueMonsters()
     @elapsedTime = 0
-    @timeSinceLastThingFell = 2000
 
     @player = new Player(this)
     @objects = [@player]
 
     @lives = 3
 
-  sendNewThing: ->
-    choice = (array) -> array[Math.floor(Math.random() * array.length)]
-
-    if @thingsSincePickup >= @pickupRate
-      nextThing = choice(@pickupTypes)
-      @thingsSincePickup = 0
-    else
-      nextThing = choice(@enemyTypes)
-      @thingsSincePickup += 1
-
-    @objects.push (new nextThing(this))
-
   update: (delta) ->
     if @gameOver()
       return
 
     @elapsedTime += delta
-    @timeSinceLastThingFell += delta
-    if @timeSinceLastThingFell >= 600
-      @sendNewThing()
-      @timeSinceLastThingFell = 0
+
+    toDrop = ([dropInfo[0], dropInfo[2]] for dropInfo in @enemyQueue when @elapsedTime >= dropInfo[1])
+    @enemyQueue = (dropInfo for dropInfo in @enemyQueue when @elapsedTime < dropInfo[1])
+
+    sendEnemy = (enemyType, lane) =>
+      @objects.push (new enemyType(this, lane))
+
+    sendEnemy(drop[0], drop[1]) for drop in toDrop
 
     object.update(delta) for object in @aliveObjects()
 
