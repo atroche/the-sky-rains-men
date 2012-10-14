@@ -1,8 +1,13 @@
 class Entity
 
+  constructor: ->
+    @image = window.assets.images[@imgName]
+    @width = @image.width
+    @height = @image.height
+
   render: ->
     unless @dead
-      @sprite.draw(@x, @y)
+      @world.ctx.drawImage(@image, @x, @y)
       if @world.showHitBoxes
         @world.ctx.strokeStyle = "white"
         @world.ctx.strokeRect(@x, @y, @width, @height)

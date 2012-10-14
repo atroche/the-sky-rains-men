@@ -3,11 +3,9 @@ class FallingThing extends Entity
   @y: 10
 
   constructor: (@world) ->
-    @y = 10
-    @sprite = new SpriteImage(@world, @imgFilename)
+    super()
 
-    @height = @sprite.image.height
-    @width = @sprite.image.width
+    @y = 10
 
     @centreOn (@world.middleOfLane @lane)
 

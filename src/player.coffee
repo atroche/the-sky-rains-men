@@ -1,17 +1,17 @@
 class Player extends Entity
 
+  imgName: "player"
+
   constructor: (@world) ->
+    super()
+
     @lane = 2
     @y = @world.height
 
     @speed = @world.playerSpeed || .7
     @returnSpeed = @world.returnSpeed || 1.5
 
-    @sprite = new SpriteImage(@world, "img/player.png")
     @swordSounds = (new Audio("audio/sword#{num}.wav") for num in [1 .. 4])
-
-    @height = @sprite.image.height
-    @width = @sprite.image.width
 
     @centreOn (@world.middleOfLane 2)
 
