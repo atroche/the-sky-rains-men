@@ -22,4 +22,7 @@ class Enemy extends FallingThing
     @world.player.makeSwordNoise()
     super()
 
+  @releaseTime: ->
+    return 0
+
 window.Enemy = Enemy

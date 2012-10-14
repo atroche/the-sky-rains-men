@@ -23,5 +23,7 @@ class Bat extends Enemy
   timeToHit: ->
     return super() + @stopFor
 
+  @releaseTime: ->
+    return 5 * 1000
 
 window.Bat = Bat

@@ -44,7 +44,9 @@ class World
     hitTime = 0
     oldLane = 2
     while hitTime < 1000 * 60 * 3
-      feasibleEnemies = (enemyType for enemyType in @enemyTypes when hitTime > enemyType.timeToHit())
+      feasibleEnemies = @enemyTypes.filter (enemy) ->
+        hitTime > enemy.timeToHit() and hitTime > enemy.releaseTime()
+
       if feasibleEnemies.length == 0
         hitTime += 1
         continue
@@ -53,14 +55,16 @@ class World
 
       if queue.length == 0
         reactionTime = 0
-      else if hitTime > 40 * 1000
-        reactionTime = 150
-      else if hitTime > 30 * 1000
-        reactionTime = 200
-      else if hitTime > 15 * 1000
+      else if hitTime > 25 * 1000
+        reactionTime = 190
+      else if hitTime > 20 * 1000
+        reactionTime = 210
+      else if hitTime > 10 * 1000
+        reactionTime = 220
+      else if hitTime > 5 * 1000
         reactionTime = 230
       else
-        reactionTime = 250
+        reactionTime = 240
 
       newHitTime = hitTime + @timeBetweenLanes(oldLane, newLane) + reactionTime
       queue.push([newEnemy, newHitTime, newLane])
