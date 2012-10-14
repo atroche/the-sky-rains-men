@@ -107,7 +107,7 @@ class AssetManager
     apercent = math.round ++@complete/@total*100
     funcs = []
     afuncs = []
-    if status then s = "load" else "error"
+    if status then s = "load" else s = "error"
     funcs = funcs.concat @callbacks[s][asset.pack]
     afuncs = afuncs.concat @["on"+s]
     if percent is 100 then funcs = funcs.concat @callbacks.complete[asset.pack]
@@ -118,10 +118,11 @@ class AssetManager
 
   filetypes =
       image: ["png","gif","jpg","jpeg","tiff"]
-      sound: ["mp3","ogg"]
+      sound: ["mp3","ogg", "wav"]
   codecs =
     'mp3':'audio/mpeg'
     'ogg':'audio/ogg'
+    'wav':'audio/wav'
 
 window.AssetManager = AssetManager
 

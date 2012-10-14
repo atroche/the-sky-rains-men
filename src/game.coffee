@@ -2,7 +2,7 @@ class Game
 
   FPS: 60
 
-  constructor: ->
+  constructor: (assets) ->
     @lastUpdate = Date.now()
 
     @keysDown = {}
@@ -26,7 +26,7 @@ class Game
       if e.keyCode in [37, 39]
         e.preventDefault()
 
-    @world = new World
+    @world = new World(assets)
 
     bg_music = new Audio("audio/bg_music.mp3")
     bg_music.loop = true

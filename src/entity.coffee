@@ -1,7 +1,7 @@
 class Entity
 
   constructor: ->
-    @image = window.assets.images[@imgName]
+    @image = @world.assets.core[@imgName]
     @width = @image.width
     @height = @image.height
 

@@ -11,7 +11,7 @@ class World
   showHitBoxes: false
   pickupRate: 10
 
-  constructor: ->
+  constructor: (@assets) ->
     @elapsedTime = 0
 
     @enemyTypes = [Goblin, Skeleton]
@@ -34,7 +34,7 @@ class World
 
     @objects = [@player]
 
-    @dyingSound = new Audio("audio/dying.wav")
+    @dyingSound = @assets.core.dying
 
     @enemyQueue = @queueMonsters()
 

@@ -11,7 +11,7 @@ class Player extends Entity
     @speed = @world.playerSpeed || .7
     @returnSpeed = @world.returnSpeed || 1.5
 
-    @swordSounds = (new Audio("audio/sword#{num}.wav") for num in [1 .. 4])
+    @swordSounds = (@world.assets.core["sword#{num}"] for num in [1 .. 4])
 
     @centreOn (@world.middleOfLane 2)
 
