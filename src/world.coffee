@@ -53,6 +53,12 @@ class World
 
       if queue.length == 0
         reactionTime = 0
+      else if hitTime > 40 * 1000
+        reactionTime = 150
+      else if hitTime > 30 * 1000
+        reactionTime = 200
+      else if hitTime > 15 * 1000
+        reactionTime = 230
       else
         reactionTime = 250
 
