@@ -14,7 +14,7 @@ class World
   constructor: (@assets) ->
     @elapsedTime = 0
 
-    @enemyTypes = [Goblin, Skeleton]
+    @enemyTypes = [Goblin, Skeleton, Bat]
     @pickupTypes = [ExtraLife]
 
     @laneWidth = (@width / @numLanes)

@@ -8,6 +8,7 @@ $(->
         {name: "skeleton", src: "img/skeleton.png"},
         {name: "player", src: "img/player.png"},
         {name: "goblin", src: "img/goblin.png"},
+        {name: "bat", src: "img/bat.png"},
         {name: "lostLife", src: "audio/lostLife.wav"},
         {name: "sword1", src: "audio/sword1.wav"},
         {name: "sword2", src: "audio/sword2.wav"},
