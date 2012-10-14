@@ -5,7 +5,8 @@ class Bat extends Enemy
   imgName: "bat"
 
   stoppedFor: 0
-  stopFor: 300
+  @stopFor: 500
+  stopFor: 500
 
   constructor: (@world, @lane) ->
     @stopAt = Math.floor(Math.random() * @world.height / 2)
@@ -20,7 +21,7 @@ class Bat extends Enemy
 
     super(delta)
 
-  timeToHit: ->
+  @timeToHit: ->
     return super() + @stopFor
 
   @releaseTime: ->
