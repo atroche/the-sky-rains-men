@@ -7,10 +7,9 @@ class FallingThing extends Entity
 
     @y = 10
 
-    @centreOn (@world.middleOfLane @lane)
-
   update: (delta) ->
     unless @stopped
+      @centreOn (@world.middleOfLane @lane)
       @y += delta * @speed * Math.log(@world.elapsedTime) / 50
 
     if not @touchedPlayer and @isCollidingWith(@world.player)
