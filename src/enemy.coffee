@@ -7,7 +7,7 @@ class Enemy extends FallingThing
     super(@world)
 
   checkForPlayerDeath: ->
-    if not @usedUpALife and @y > @world.player.y + 30
+    if not @usedUpALife and @y > @world.player.y + @height + 10
       @world.lives -= 1
       if @world.gameOver()
         @world.dyingSound.play()
