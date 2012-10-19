@@ -26,6 +26,7 @@ class World
     @canvas.width = 800
     @canvas.height = 600
 
+
     @ctx = @canvas.getContext('2d')
     @ctx.webkitImageSmoothingEnabled = false
     @ctx.font = "bold 16pt Arial"
@@ -53,18 +54,10 @@ class World
       newEnemy = choice(feasibleEnemies)
       newLane = Math.floor(Math.random() * @numLanes) + 1
 
-      if queue.length == 0
+      if queue.length == 0 # don't start with a delay!
         reactionTime = 0
-      else if hitTime > 25 * 1000
-        reactionTime = 190
-      else if hitTime > 20 * 1000
-        reactionTime = 210
-      else if hitTime > 10 * 1000
-        reactionTime = 220
-      else if hitTime > 5 * 1000
-        reactionTime = 230
       else
-        reactionTime = 240
+        reactionTime = 250 - (hitTime / 2000)
 
       newHitTime = hitTime + @timeBetweenLanes(oldLane, newLane) + reactionTime
       queue.push([newEnemy, newHitTime, newLane])
@@ -112,8 +105,8 @@ class World
 
     @elapsedTime += delta
 
-    toDrop = ([dropInfo[0], dropInfo[2]] for dropInfo in @enemyQueue when @elapsedTime >= dropInfo[1])
-    @enemyQueue = (dropInfo for dropInfo in @enemyQueue when @elapsedTime < dropInfo[1])
+    toDrop = ([dropInfo[0], dropInfo[2]] for dropInfo in @enemyQueue when @elapsedTime >= dropInfo[1] - (dropInfo[0].stopFor or 0))
+    @enemyQueue = (dropInfo for dropInfo in @enemyQueue when @elapsedTime < dropInfo[1]  - (dropInfo[0].stopFor or 0))
 
     sendEnemy = (enemyType, lane) =>
       @objects.push (new enemyType(this, lane))

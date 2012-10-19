@@ -3,9 +3,30 @@ class Game
   FPS: 60
 
   constructor: (assets) ->
+    @world = new World(assets)
+
     @lastUpdate = Date.now()
 
     @keysDown = {}
+
+    @world.canvas.addEventListener 'mousedown', (e) =>
+      if @world.gameOver()
+        @world.reset()
+
+      keyPress = $.Event("keydown");
+      console.log e.offsetX
+      console.log @world.player.x
+      if e.offsetX > @world.player.x
+        console.log 'right'
+        keyPress.keyCode = 39
+      else
+        console.log 'left'
+        keyPress.keyCode = 37
+      $(@world.canvas).trigger(keyPress)
+
+    @world.canvas.addEventListener 'mouseup', (e) =>
+      console.log 'mouseup'
+      @keysDown = {}
 
     $("body").keydown (e) =>
       @keysDown[e.keyCode] = true
@@ -26,12 +47,10 @@ class Game
       if e.keyCode in [37, 39]
         e.preventDefault()
 
-    @world = new World(assets)
-
     bg_music = new Audio("audio/bg_music.mp3")
     bg_music.loop = true
     bg_music.addEventListener 'canplaythrough', ->
-      bg_music.play()
+      # bg_music.play()
 
   main: =>
     delta = Date.now() - @lastUpdate
