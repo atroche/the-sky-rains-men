@@ -9,20 +9,30 @@ class Game
 
     @keysDown = {}
 
-    @world.canvas.addEventListener 'mousedown', (e) =>
+    @world.canvas.addEventListener 'touchmove', (e) =>
+      e = e.changedTouches[0]
+      @world.player.x = e.pageX
+      return false
+
+    @world.canvas.addEventListener 'touchstart', (e) =>
+      e = e.changedTouches[0]
+      @world.player.x = e.pageX
+      # e = e.changedTouches[0]
+      # @world.ctx.fillText(e.offsetX, @width + 30, 200)
       if @world.gameOver()
         @world.reset()
+      return false
 
-      keyPress = $.Event("keydown");
-      console.log e.offsetX
-      console.log @world.player.x
-      if e.offsetX > @world.player.x
-        console.log 'right'
-        keyPress.keyCode = 39
-      else
-        console.log 'left'
-        keyPress.keyCode = 37
-      $(@world.canvas).trigger(keyPress)
+      # keyPress = $.Event("keydown")
+      # console.log e.offsetX
+      # console.log @world.player.x
+      # if e.pageX > @world.player.x
+      #   console.log 'right'
+      #   keyPress.keyCode = 39
+      # else
+      #   console.log 'left'
+      #   keyPress.keyCode = 37
+      # $(@world.canvas).trigger(keyPress)
 
     @world.canvas.addEventListener 'mouseup', (e) =>
       console.log 'mouseup'
@@ -68,8 +78,8 @@ class Game
       @world.player.moveRight(delta)
     else if 82 of @keysDown # r / R
       @reset()
-    else
-      @world.player.moveToCentre(delta)
+    # else
+    #   @world.player.moveToCentre(delta)
 
   update: (delta) ->
     @reactToInput(delta)

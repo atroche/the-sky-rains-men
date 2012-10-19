@@ -1,5 +1,11 @@
 $(->
 
+  document.ontouchstart = (e) ->
+      e.preventDefault()
+
+  document.ontouchmove = (e) ->
+      e.preventDefault()
+
   window.assets = assets = new AssetManager({
     baseUrl: ""
     packs:
@@ -25,23 +31,23 @@ $(->
     game = new Game(assets)
     game.run()
 
-    Settings = ->
-      this.reset = ->
-        game.reset()
+    # Settings = ->
+    #   this.reset = ->
+    #     game.reset()
 
-      this.playerSpeed = game.world.player.speed
-      this.showHitBoxes = game.world.showHitBoxes
+    #   this.playerSpeed = game.world.player.speed
+    #   this.showHitBoxes = game.world.showHitBoxes
 
-    settings = new Settings
-    gui = new dat.GUI()
+    # settings = new Settings
+    # gui = new dat.GUI()
 
-    playerSpeed = gui.add(settings, 'playerSpeed', .1, 2)
-    playerSpeed.onChange(game.setPlayerSpeed)
+    # playerSpeed = gui.add(settings, 'playerSpeed', .1, 2)
+    # playerSpeed.onChange(game.setPlayerSpeed)
 
-    showHitBoxes = gui.add(settings, 'showHitBoxes')
-    showHitBoxes.onChange(game.toggleShowHitBoxes)
+    # showHitBoxes = gui.add(settings, 'showHitBoxes')
+    # showHitBoxes.onChange(game.toggleShowHitBoxes)
 
-    reset = gui.add(settings, 'reset')
+    # reset = gui.add(settings, 'reset')
 
   assets.downloadAll()
 
