@@ -57,7 +57,7 @@ class World
       if queue.length == 0 # don't start with a delay!
         reactionTime = 0
       else
-        reactionTime = 250 - (hitTime / 2000)
+        reactionTime = 400 - (hitTime / 2000)
 
       newHitTime = hitTime + @timeBetweenLanes(oldLane, newLane) + reactionTime
       queue.push([newEnemy, newHitTime, newLane])

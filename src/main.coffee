@@ -51,4 +51,12 @@ $(->
 
   assets.downloadAll()
 
+  loadPhantomLimb = ->
+    scriptTag = document.createElement("script")
+    scriptTag.type = "text/javascript"
+    scriptTag.src = "/lib/phantom-limb.js"
+    document.body.appendChild scriptTag
+
+  loadPhantomLimb()
+
 )
