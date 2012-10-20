@@ -6,20 +6,16 @@ class Enemy extends FallingThing
     @lostLifeSound = @world.assets.core.lostLife
     super(@world)
 
-  checkForPlayerDeath: ->
-    if not @usedUpALife and @y > @world.player.y + @height + 10
+  update: (delta) ->
+    super(delta)
+
+  onTouchingPlayer: ->
+    if not @usedUpALife
       @world.lives -= 1
       if @world.gameOver()
         @world.dyingSound.play()
       @usedUpALife = true
       @lostLifeSound.play()
-
-  update: (delta) ->
-    @checkForPlayerDeath()
-    super(delta)
-
-  onTouchingPlayer: ->
-    @world.player.makeSwordNoise()
     super()
 
   @releaseTime: ->

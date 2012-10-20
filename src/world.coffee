@@ -2,7 +2,7 @@ class World
 
   @height: 500
   height: 500
-  width: 500
+  width: 370
   laneLineWidth: 10
   leftBoundary: 0
   rightBoundary: 500
@@ -119,7 +119,9 @@ class World
     # clear canvas for redrawing!
     @ctx.clearRect(0, 0, @canvas.width, @canvas.height)
 
-    @drawLanes()
+
+
+    # @drawLanes()
     @drawLives()
     @drawTimer()
 
@@ -148,9 +150,11 @@ class World
     return @laneLineWidth / 2 + (laneNum - 1) * @laneWidth + @laneWidth / 2
 
   drawLives: ->
+    @ctx.fillStyle = "white"
     @ctx.fillText(@lives, @width + 50, 60)
 
   drawTimer: ->
+    @ctx.fillStyle = "white"
     @secondsSinceStart = (@elapsedTime / 1000).toFixed(2)
 
     @ctx.fillText(@secondsSinceStart, @width + 50, 90)
