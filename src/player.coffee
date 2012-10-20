@@ -6,7 +6,7 @@ class Player extends Entity
     super()
 
     @lane = 2
-    @y = @world.height
+    @y = 500
 
     @speed = @world.playerSpeed || .7
     @returnSpeed = @world.returnSpeed || 1.5

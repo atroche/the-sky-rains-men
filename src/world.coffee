@@ -1,7 +1,7 @@
 class World
 
-  @height: 500
-  height: 500
+  @height: 1000
+  height: 1000
   width: 370
   laneLineWidth: 10
   leftBoundary: 0
