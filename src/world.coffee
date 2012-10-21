@@ -10,12 +10,12 @@ class World
   lives: 3
   showHitBoxes: false
   pickupRate: 10
+  score: 0
 
   constructor: (@assets) ->
     @elapsedTime = 0
 
-    @enemyTypes = [Goblin, Skeleton, Bat, Wizard]
-    @pickupTypes = [ExtraLife]
+    @enemyTypes = [Goblin, Skeleton, Bat, Wizard, Treasure]
 
     @laneWidth = (@width / @numLanes)
 
@@ -98,6 +98,7 @@ class World
     @objects = [@player]
 
     @lives = 3
+    @score = 0
 
   update: (delta) ->
     if @gameOver()
@@ -155,8 +156,7 @@ class World
 
   drawTimer: ->
     @ctx.fillStyle = "white"
-    @secondsSinceStart = (@elapsedTime / 1000).toFixed(2)
 
-    @ctx.fillText(@secondsSinceStart, @width + 50, 90)
+    @ctx.fillText("Score: " + @score, @width + 50, 90)
 
 window.World = World

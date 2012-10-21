@@ -24,4 +24,7 @@ class FallingThing extends Entity
     distanceToPlayer = World.height - @y
     return distanceToPlayer / @speed
 
+  @releaseTime: ->
+    return 0
+
 window.FallingThing = FallingThing

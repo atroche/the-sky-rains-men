@@ -18,7 +18,4 @@ class Enemy extends FallingThing
       @lostLifeSound.play()
     super()
 
-  @releaseTime: ->
-    return 0
-
 window.Enemy = Enemy

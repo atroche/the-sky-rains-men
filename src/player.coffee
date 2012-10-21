@@ -23,8 +23,8 @@ class Player extends Entity
   tryToMoveTo: (newX) ->
     if newX >= (@world.middleOfLane 3)
       @x = @world.middleOfLane 3
-    else if newX <= (@world.middleOfLane 1)
-      @x = @world.middleOfLane 1
+    else if newX <= (@world.middleOfLane 1) - @width
+      @x = (@world.middleOfLane 1) - @width
     else
       @x = newX
 
