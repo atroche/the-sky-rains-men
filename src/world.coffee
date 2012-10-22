@@ -9,27 +9,18 @@ class World
   numLanes: 3
   lives: 3
   showHitBoxes: false
-  pickupRate: 10
   score: 0
 
   constructor: (@assets) ->
+    @setupCanvasContext()
+
     @elapsedTime = 0
 
     @enemyTypes = [Goblin, Skeleton, Bat, Wizard, Treasure]
 
     @laneWidth = (@width / @numLanes)
 
-    @timeSinceLastThingFell = 2000
-    @thingsSincePickup = 0
-
-    @canvas = document.getElementById('game')
-    @canvas.width = 800
-    @canvas.height = 600
-
-
-    @ctx = @canvas.getContext('2d')
-    @ctx.webkitImageSmoothingEnabled = false
-    @ctx.font = "bold 16pt Arial"
+    @enemiesSinceLastTreasure = 0
 
     @player = new Player(this)
 
@@ -39,25 +30,46 @@ class World
 
     @enemyQueue = @queueMonsters()
 
+  setupCanvasContext: ->
+    @canvas = document.getElementById('game')
+    @canvas.width = 800
+    @canvas.height = 600
+
+
+    @ctx = @canvas.getContext('2d')
+    @ctx.webkitImageSmoothingEnabled = false
+    @ctx.font = "bold 16pt Arial"
+
+
+  feasibleEnemiesToDrop: (hitTime) ->
+    return @enemyTypes.filter (enemy) ->
+        hitTime > enemy.timeToHit() and hitTime > enemy.releaseTime() and not (enemy == Treasure and @enemiesSinceLastTreasure < 3)
+
   queueMonsters: ->
     queue = []
     choice = (array) -> array[Math.floor(Math.random() * array.length)]
     hitTime = 0
     oldLane = 2
     while hitTime < 1000 * 60 * 3
-      feasibleEnemies = @enemyTypes.filter (enemy) ->
-        hitTime > enemy.timeToHit() and hitTime > enemy.releaseTime()
+      feasibleEnemies = @feasibleEnemiesToDrop(hitTime)
 
       if feasibleEnemies.length == 0
         hitTime += 1
         continue
+
       newEnemy = choice(feasibleEnemies)
+
+      if newEnemy != Treasure
+        @enemiesSinceLastTreasure += 1
+      else
+        @enemiesSinceLastTreasure = 0
+
       newLane = Math.floor(Math.random() * @numLanes) + 1
 
       if queue.length == 0 # don't start with a delay!
-        reactionTime = 0
+        reactionTime = 250
       else
-        reactionTime = 400 - (hitTime / 2000)
+        reactionTime = 300 - (hitTime / 2000)
 
       newHitTime = hitTime + @timeBetweenLanes(oldLane, newLane) + reactionTime
       queue.push([newEnemy, newHitTime, newLane])
