@@ -11,4 +11,7 @@ class Treasure extends FallingThing
     @world.score += 1
     super()
 
+  @releaseTime: ->
+    return 5 * 1000
+
 window.Treasure = Treasure
