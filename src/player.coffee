@@ -1,6 +1,11 @@
 class Player extends Entity
 
   imgName: "player"
+  hitboxX: 5
+  hitboxY: 5
+  hitboxWidth: 45
+  hitboxHeight: 10
+
 
   constructor: (@world) ->
     super()

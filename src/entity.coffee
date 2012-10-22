@@ -1,5 +1,10 @@
 class Entity
 
+  hitboxX: 0
+  hitboxY: 0
+  hitboxWidth: 0
+  hitboxHeight: 0
+
   constructor: ->
     @image = @world.assets.core[@imgName]
     @width = @image.width
@@ -23,12 +28,24 @@ class Entity
 
   # via https://github.com/mdlawson/rogue/blob/master/src/collision.coffee#L3
   isCollidingWith: (otherEntity) ->
-    w = (@width + otherEntity.width)/ 2
-    h = (@height + otherEntity.height) / 2
+    thisWidth = @width + @hitboxWidth
+    thisHeight = @height + @hitboxHeight
+
+    otherWidth = otherEntity.hitboxWidth or otherEntity.width
+    otherHeight = otherEntity.hitboxHeight or otherEntity.height
+
+    w = (thisWidth + otherWidth)/ 2
+    h = (thisHeight + otherHeight) / 2
+
+    thisX = @x + @hitboxX
+    thisY = @y + @hitboxY
+
+    otherY = otherEntity.y + otherEntity.hitboxY
+    otherX = otherEntity.x + otherEntity.hitboxX
 
     # x and y distance between entities
-    dx = (@x + @width / 2) - (otherEntity.x + otherEntity.width / 2)
-    dy = (@y + @height / 2) - (otherEntity.y + otherEntity.height / 2)
+    dx = (thisX + thisWidth / 2) - (otherX + otherWidth / 2)
+    dy = (thisY + thisHeight / 2) - (otherY + otherHeight / 2)
 
     if Math.abs(dx) <= w and Math.abs(dy) <= h
       wy = w * dy
