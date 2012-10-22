@@ -1,10 +1,10 @@
 class Player extends Entity
 
   imgName: "player"
-  hitboxX: 5
+  hitboxX: 0
   hitboxY: 5
-  hitboxWidth: 45
-  hitboxHeight: 10
+  hitboxWidth: 64
+  hitboxHeight: 30
 
 
   constructor: (@world) ->
