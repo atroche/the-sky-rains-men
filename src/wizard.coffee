@@ -13,7 +13,7 @@ class Wizard extends Enemy
   constructor: (@world, @lane) ->
     @eventualLane = @lane
 
-    @stopAt = Math.floor(Math.random() * @world.height / 2.5)
+    @stopAt = Math.floor(Math.random() * @world.height / 3)
 
     switch @lane
       when 1
