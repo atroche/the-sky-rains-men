@@ -18,4 +18,7 @@ class Enemy extends FallingThing
       @lostLifeSound.play()
     super()
 
+  @probability: ->
+    return 0.5
+
 window.Enemy = Enemy

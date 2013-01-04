@@ -25,6 +25,9 @@ class Bat extends Enemy
     return super() + @stopFor
 
   @releaseTime: ->
-    return 5 * 1000
+    return 10 * 1000
+
+  @probability: ->
+    return 0.2
 
 window.Bat = Bat

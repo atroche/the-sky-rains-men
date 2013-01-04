@@ -1,3 +1,15 @@
+shuffle = (o) -> #v1.0
+  j = undefined
+  x = undefined
+  i = o.length
+
+  while i
+    j = parseInt(Math.random() * i)
+    x = o[--i]
+    o[i] = o[j]
+    o[j] = x
+  o
+
 class World
 
   @height: 1000
@@ -49,11 +61,15 @@ class World
 
   queueMonsters: ->
     queue = []
-    choice = (array) -> array[Math.floor(Math.random() * array.length)]
     hitTime = 0
     oldLane = 2
     while hitTime < 1000 * 60 * 5
-      feasibleEnemies = @feasibleEnemiesToDrop(hitTime)
+      feasibleEnemies = shuffle(@feasibleEnemiesToDrop(hitTime))
+
+      chooseEnemy = ->
+        for enemyType in feasibleEnemies
+          if enemyType.probability() > Math.random()
+            return enemyType
 
       if feasibleEnemies.length == 0
         hitTime += 1
@@ -63,7 +79,9 @@ class World
         newEnemy = Treasure
         @enemiesSinceLastTreasure = 0
       else
-        newEnemy = choice(feasibleEnemies)
+        newEnemy = null
+        until newEnemy
+          newEnemy = chooseEnemy()
         @enemiesSinceLastTreasure += 1
 
       newLane = Math.floor(Math.random() * @numLanes) + 1

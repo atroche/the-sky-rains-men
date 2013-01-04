@@ -13,7 +13,7 @@ class Player extends Entity
     @lane = 2
     @y = 500
 
-    @speed = @world.playerSpeed || .7
+    @speed = @world.playerSpeed || 1.2
     @returnSpeed = @speed * 2
 
     @swordSounds = (@world.assets.core["sword#{num}"] for num in [1 .. 4])

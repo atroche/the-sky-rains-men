@@ -49,6 +49,9 @@ class Wizard extends Enemy
     return super() + @stopFor
 
   @releaseTime: ->
-    return 5 * 1000
+    return 15 * 1000
+
+  @probability: ->
+    return 0.1
 
 window.Wizard = Wizard
