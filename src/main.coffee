@@ -32,23 +32,31 @@ $(->
     game = new Game(assets)
     game.run()
 
-    # Settings = ->
-    #   this.reset = ->
-    #     game.reset()
+    Settings = ->
+      this.reset = ->
+        game.reset()
 
-    #   this.playerSpeed = game.world.player.speed
-    #   this.showHitBoxes = game.world.showHitBoxes
+      this.initialSpeed = game.world.initialSpeed
+      this.playerSpeed = game.world.player.speed
+      this.acceleration = game.world.acceleration
+      this.showHitBoxes = game.world.showHitBoxes
 
-    # settings = new Settings
-    # gui = new dat.GUI()
+    settings = new Settings
+    gui = new dat.GUI()
 
-    # playerSpeed = gui.add(settings, 'playerSpeed', .1, 2)
-    # playerSpeed.onChange(game.setPlayerSpeed)
+    initialSpeed = gui.add(settings, 'initialSpeed', 100, 500)
+    initialSpeed.onChange(game.setInitialSpeed)
 
-    # showHitBoxes = gui.add(settings, 'showHitBoxes')
-    # showHitBoxes.onChange(game.toggleShowHitBoxes)
+    acceleration = gui.add(settings, 'acceleration', .1, 3)
+    acceleration.onChange(game.setAcceleration)
 
-    # reset = gui.add(settings, 'reset')
+    playerSpeed = gui.add(settings, 'playerSpeed', .1, 3)
+    playerSpeed.onChange(game.setPlayerSpeed)
+
+    showHitBoxes = gui.add(settings, 'showHitBoxes')
+    showHitBoxes.onChange(game.toggleShowHitBoxes)
+
+    reset = gui.add(settings, 'reset')
 
   assets.downloadAll()
 

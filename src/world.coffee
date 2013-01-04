@@ -14,9 +14,12 @@ class World
   constructor: (@assets) ->
     @setupCanvasContext()
 
+    @initialSpeed = 250
+    @acceleration = 2
+
     @elapsedTime = 0
 
-    @enemyTypes = [Goblin, Skeleton, Bat, Wizard, Treasure]
+    @enemyTypes = [Goblin, Skeleton, Bat, Wizard]
 
     @laneWidth = (@width / @numLanes)
 
@@ -40,36 +43,35 @@ class World
     @ctx.webkitImageSmoothingEnabled = false
     @ctx.font = "bold 16pt Arial"
 
-
   feasibleEnemiesToDrop: (hitTime) ->
     return @enemyTypes.filter (enemy) ->
-        hitTime > enemy.timeToHit() and hitTime > enemy.releaseTime() and not (enemy == Treasure and @enemiesSinceLastTreasure < 3)
+        hitTime > enemy.timeToHit() and hitTime > enemy.releaseTime()
 
   queueMonsters: ->
     queue = []
     choice = (array) -> array[Math.floor(Math.random() * array.length)]
     hitTime = 0
     oldLane = 2
-    while hitTime < 1000 * 60 * 3
+    while hitTime < 1000 * 60 * 5
       feasibleEnemies = @feasibleEnemiesToDrop(hitTime)
 
       if feasibleEnemies.length == 0
         hitTime += 1
         continue
 
-      newEnemy = choice(feasibleEnemies)
-
-      if newEnemy != Treasure
-        @enemiesSinceLastTreasure += 1
-      else
+      if @enemiesSinceLastTreasure > 6
+        newEnemy = Treasure
         @enemiesSinceLastTreasure = 0
+      else
+        newEnemy = choice(feasibleEnemies)
+        @enemiesSinceLastTreasure += 1
 
       newLane = Math.floor(Math.random() * @numLanes) + 1
 
       if queue.length == 0 # don't start with a delay!
-        reactionTime = 250
+        reactionTime = @initialSpeed
       else
-        reactionTime = 300 - (hitTime / 2000)
+        reactionTime = @initialSpeed + 50 - (hitTime * (1 / (@acceleration * 1000)))
 
       newHitTime = hitTime + @timeBetweenLanes(oldLane, newLane) + reactionTime
       queue.push([newEnemy, newHitTime, newLane])
@@ -170,5 +172,14 @@ class World
     @ctx.fillStyle = "white"
 
     @ctx.fillText("Score: " + @score, @width + 50, 90)
+
+  setAcceleration: (acceleration) ->
+    @acceleration = acceleration
+
+  setInitialSpeed: (initialSpeed) ->
+    @initialSpeed = initialSpeed
+
+  setPlayerSpeed: (playerSpeed) ->
+    @player.speed = playerSpeed
 
 window.World = World
