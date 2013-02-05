@@ -26,12 +26,12 @@ class World
   constructor: (@assets) ->
     @setupCanvasContext()
 
-    @initialSpeed = 250
-    @acceleration = 2
+    @initialSpeed = 350
+    @acceleration = 1
 
     @elapsedTime = 0
 
-    @enemyTypes = [Goblin, Skeleton, Bat, Wizard]
+    @enemyTypes = [Goblin, Skeleton, Bat, Wizard, ExtraLife]
 
     @laneWidth = (@width / @numLanes)
 
@@ -75,7 +75,7 @@ class World
         hitTime += 1
         continue
 
-      if @enemiesSinceLastTreasure > 6
+      if @enemiesSinceLastTreasure > 4
         newEnemy = Treasure
         @enemiesSinceLastTreasure = 0
       else

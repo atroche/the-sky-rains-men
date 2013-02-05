@@ -7,4 +7,7 @@ class ExtraLife extends FallingThing
     @world.lives += 1
     super()
 
+  @probability: ->
+    return 0.2
+
 window.ExtraLife = ExtraLife
