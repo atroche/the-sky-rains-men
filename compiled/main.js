@@ -84,6 +84,7 @@
       showHitBoxes.onChange(game.toggleShowHitBoxes);
       return reset = gui.add(settings, 'reset');
     });
+
     return assets.downloadAll();
   });
 
